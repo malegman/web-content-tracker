@@ -1,35 +1,10 @@
 package ru.tinkoff.edu.java.linkparser.common;
 
-import java.util.Objects;
+public interface LinkParser {
 
-/**
- * Абстрактный парсер ссылок
- */
-public abstract class AbstractLinkParser {
+    Result doParse(final String link);
 
-    private AbstractLinkParser next;
-
-    protected abstract Result doInternalParse(String link);
-
-    public void setNext(final AbstractLinkParser next) {
-        this.next = Objects.requireNonNull(next);
-    }
-
-    public Result doParse(final String link) {
-
-        final var result = this.doInternalParse(link);
-        if (result.isSuccess()) {
-            return result;
-        }
-
-        if (this.next == null) {
-            return Result.failed();
-        } else {
-            return this.next.doParse(link);
-        }
-    }
-
-    public sealed interface Result {
+    sealed interface Result {
 
         default boolean isSuccess() {
             return false;

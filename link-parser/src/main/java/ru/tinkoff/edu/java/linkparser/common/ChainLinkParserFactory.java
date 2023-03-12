@@ -1,11 +1,11 @@
 package ru.tinkoff.edu.java.linkparser.common;
 
-public class LinkParserChainFactory {
+public class ChainLinkParserFactory {
 
-    public static AbstractLinkParser linkParsersChainOf(final AbstractLinkParser... parsers) {
+    public static LinkParser chainOf(final AbstractChainLinkParser... parsers) {
 
         if (parsers == null || parsers.length == 0) {
-            return new DefaultLinkParser();
+            return new DefaultChainLinkParser();
         }
 
         final var parserMaxIndex = parsers.length - 1;
@@ -16,7 +16,7 @@ public class LinkParserChainFactory {
         return parsers[0];
     }
 
-    private static final class DefaultLinkParser extends AbstractLinkParser {
+    private static final class DefaultChainLinkParser extends AbstractChainLinkParser {
 
         @Override
         protected Result doInternalParse(String link) {
