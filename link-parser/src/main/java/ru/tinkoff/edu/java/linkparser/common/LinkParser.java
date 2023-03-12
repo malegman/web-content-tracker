@@ -1,5 +1,6 @@
 package ru.tinkoff.edu.java.linkparser.common;
 
+@FunctionalInterface
 public interface LinkParser {
 
     Result doParse(final String link);
