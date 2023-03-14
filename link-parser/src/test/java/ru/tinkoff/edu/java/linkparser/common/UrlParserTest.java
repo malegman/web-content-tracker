@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ru.tinkoff.edu.java.linkparser.github.GitHubUrlParser;
 import ru.tinkoff.edu.java.linkparser.github.payload.GitHubPayload;
 import ru.tinkoff.edu.java.linkparser.stackoverflow.StackOverflowUrlParser;
+import ru.tinkoff.edu.java.linkparser.stackoverflow.domain.id.QuestionId;
 import ru.tinkoff.edu.java.linkparser.stackoverflow.payload.StackOverflowPayload;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -59,7 +60,7 @@ public class UrlParserTest {
     void urlParser_StackOverflowUrl_ReturnsSuccessResult() {
 
         final var link = "https://stackoverflow.com/questions/1642028/what-is-the-operator-in-c";
-        final var questionId = 1642028L;
+        final var questionId = new QuestionId(1642028L);
         final var payload = new StackOverflowPayload(questionId);
 
         final var stackoverflowSuccess = "stackoverflowSuccess";

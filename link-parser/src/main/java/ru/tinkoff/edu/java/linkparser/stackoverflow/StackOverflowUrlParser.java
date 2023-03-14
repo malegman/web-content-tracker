@@ -1,13 +1,14 @@
 package ru.tinkoff.edu.java.linkparser.stackoverflow;
 
 import ru.tinkoff.edu.java.linkparser.common.UrlParser;
+import ru.tinkoff.edu.java.linkparser.stackoverflow.domain.id.QuestionId;
 import ru.tinkoff.edu.java.linkparser.stackoverflow.payload.StackOverflowPayload;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
- * Парсер ссылок ресурса stackoverflow.com
+ * Парсер ссылок ресурса stackoverflow.com, реализация {@link UrlParser}
  */
 public final class StackOverflowUrlParser<T> extends UrlParser<T> {
 
@@ -28,7 +29,7 @@ public final class StackOverflowUrlParser<T> extends UrlParser<T> {
         if (matcher.find()) {
             final var questionId = Long.parseLong(matcher.group("questionId"));
 
-            return Result.success(new StackOverflowPayload(questionId), this.resultProcessor);
+            return Result.success(new StackOverflowPayload(new QuestionId(questionId)), this.resultProcessor);
         }
 
         return this.parseNext(url);
@@ -53,6 +54,11 @@ public final class StackOverflowUrlParser<T> extends UrlParser<T> {
             return new Success<>(payload, processor);
         }
 
+        /**
+         * Интерфейс процессора, обрабатывающего результат разбора ссылки
+         *
+         * @param <T> тип обработки результата работы парсера
+         */
         interface Processor<T> {
 
             T processSuccess(Success<T> result);

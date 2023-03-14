@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
- * Парсер ссылок ресурса github.com
+ * Парсер ссылок ресурса github.com, реализация {@link UrlParser}
  */
 public final class GitHubUrlParser<T> extends UrlParser<T> {
 
@@ -54,6 +54,11 @@ public final class GitHubUrlParser<T> extends UrlParser<T> {
             return new Success<>(payload, processor);
         }
 
+        /**
+         * Интерфейс процессора, обрабатывающего результат разбора ссылки
+         *
+         * @param <T> тип обработки результата работы парсера
+         */
         interface Processor<T> {
 
             T processSuccess(Success<T> result);

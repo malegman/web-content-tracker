@@ -1,4 +1,11 @@
 package ru.tinkoff.edu.java.linkparser.stackoverflow.payload;
 
-public record StackOverflowPayload(Long questionId) {
+import ru.tinkoff.edu.java.linkparser.stackoverflow.domain.id.QuestionId;
+
+/**
+ * Полезная нагрузка, извлекаемая из ссылки вида {@code "stackoverflow.com/questions/{questionId}"}
+ *
+ * @param questionId идентификатор вопроса
+ */
+public record StackOverflowPayload(QuestionId questionId) {
 }
