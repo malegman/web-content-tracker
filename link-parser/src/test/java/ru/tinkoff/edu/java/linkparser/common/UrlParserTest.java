@@ -34,7 +34,7 @@ public class UrlParserTest {
     }
 
     @Test
-    void parserChain_GitHubUrl_ReturnsSuccessResult() {
+    void urlParser_GitHubUrl_ReturnsSuccessResult() {
 
         final var link = "https://github.com/sanyarnd/tinkoff-java-course-2022/";
         final var user = "sanyarnd";
@@ -56,7 +56,7 @@ public class UrlParserTest {
     }
 
     @Test
-    void parserChain_StackOverflowUrl_ReturnsSuccessResult() {
+    void urlParser_StackOverflowUrl_ReturnsSuccessResult() {
 
         final var link = "https://stackoverflow.com/questions/1642028/what-is-the-operator-in-c";
         final var questionId = 1642028L;
@@ -77,7 +77,7 @@ public class UrlParserTest {
     }
 
     @Test
-    void parserChain_UnsupportedUrl_ReturnsEmptyResult() {
+    void urlParser_UnsupportedUrl_ReturnsEmptyResult() {
 
         final var link = "https://stackoverflow.com/search?q=unsupported%20link";
 
