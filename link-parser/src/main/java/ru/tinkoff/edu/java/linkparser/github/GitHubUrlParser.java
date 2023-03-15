@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public final class GitHubUrlParser<T> extends UrlParser<T> {
 
     public static final Pattern PATTERN_GITHUB_COM_USER_REPO =
-            Pattern.compile("^[a-z]+://([^.]+(?<!github)[.])?github[.]com/(?<user>[^/]+)/(?<repo>[^/]+)");
+            Pattern.compile("^https://([^.]+(?<!github)[.])?github[.]com/(?<user>[^/]+)/(?<repo>[^/]+)");
 
     private final Result.Processor<T> resultProcessor;
 

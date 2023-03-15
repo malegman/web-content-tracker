@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 public final class StackOverflowUrlParser<T> extends UrlParser<T> {
 
     public static final Pattern PATTERN_STACKOVERFLOW_QUESTION_ID =
-            Pattern.compile("^[a-z]+://stackoverflow[.]com/questions/(?<questionId>\\d+)");
+            Pattern.compile("^https://stackoverflow[.]com/questions/(?<questionId>\\d+)");
 
     private final Result.Processor<T> resultProcessor;
 
