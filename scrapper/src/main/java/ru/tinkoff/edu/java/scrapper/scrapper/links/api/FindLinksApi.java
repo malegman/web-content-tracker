@@ -14,7 +14,7 @@ import java.util.Objects;
  * API для получения отслеживаемых ссылок чата телеграмма
  */
 public abstract class FindLinksApi extends Invocation<FindLinksApi.Payload,
-        FindLinksApi.Payload.Builder, FindLinksApi.Result, FindLinksApi.Result.Visitor>{
+        FindLinksApi.Payload.Builder, FindLinksApi.Result, FindLinksApi.Result.Visitor> {
 
     @Override
     protected Result newValidationFailed(Validation validation) {
