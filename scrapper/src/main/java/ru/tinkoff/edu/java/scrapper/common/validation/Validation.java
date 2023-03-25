@@ -1,9 +1,6 @@
 package ru.tinkoff.edu.java.scrapper.common.validation;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Результат валидации объектов
@@ -24,6 +21,15 @@ public record Validation(Map<String, List<String>> fieldErrors) {
      */
     public void registerFieldError(String field, String error) {
         this.fieldErrors.computeIfAbsent(field, f -> new ArrayList<>()).add(error);
+    }
+
+    /**
+     * Возвращает ошибки полей в виде неизменяемой коллекции
+     *
+     * @return ошибки полей
+     */
+    public Map<String, List<String>> getFieldErrors() {
+        return Collections.unmodifiableMap(this.fieldErrors);
     }
 
     /**
