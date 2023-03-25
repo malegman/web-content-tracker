@@ -51,7 +51,7 @@ public abstract class DeleteTgChatApi extends Invocation<DeleteTgChatApi.Payload
 
             private TgChatId id;
 
-            public Payload.Builder id(TgChatId value) {
+            public Builder id(TgChatId value) {
                 this.id = value;
                 return this;
             }

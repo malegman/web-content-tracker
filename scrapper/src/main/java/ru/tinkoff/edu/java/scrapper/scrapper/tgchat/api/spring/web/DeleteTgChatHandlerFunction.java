@@ -37,14 +37,14 @@ public final class DeleteTgChatHandlerFunction extends AbstractScrapperHandlerFu
     @Override
     protected ServerResponse handleInternal(ServerRequest request, TransactionStatus status) {
 
-        final var requestMapper = new ResultToServerResponseMapper();
+        final var resultMapper = new ResultToServerResponseMapper();
 
         this.deleteTgChatApi.invoke(builder -> builder
                         .id(TgChatId.valueOf(request.pathVariable(Payload.PROP_ID))))
                 .onFailed(status::setRollbackOnly)
-                .visit(requestMapper);
+                .visit(resultMapper);
 
-        return requestMapper.serverResponse;
+        return resultMapper.serverResponse;
     }
 
     private final class ResultToServerResponseMapper implements Visitor {
