@@ -1,9 +1,15 @@
 package ru.tinkoff.edu.java.scrapper.common.spring.mvc;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.http.MediaType;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionOperations;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.servlet.function.HandlerFunction;
 import org.springframework.web.servlet.function.ServerRequest;
 import org.springframework.web.servlet.function.ServerResponse;
@@ -12,6 +18,7 @@ import ru.tinkoff.edu.java.scrapper.common.validation.Validation;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -19,12 +26,13 @@ import java.util.stream.Collectors;
  * Абстрактный обработчик HTTP запросов, реализует spring интерфейс {@link HandlerFunction}
  */
 @Slf4j
-public abstract class AbstractScrapperHandlerFunction implements HandlerFunction<ServerResponse> {
+public abstract class AbstractScrapperHandlerFunction implements HandlerFunction<ServerResponse>, BeanFactoryAware {
 
-    private final TransactionOperations transactionOperations;
+    private final TransactionDefinition transactionDefinition;
+    private TransactionOperations transactionOperations;
 
-    public AbstractScrapperHandlerFunction(final TransactionOperations transactionOperations) {
-        this.transactionOperations = Objects.requireNonNull(transactionOperations);
+    public AbstractScrapperHandlerFunction(final TransactionDefinition transactionDefinition) {
+        this.transactionDefinition = Objects.requireNonNull(transactionDefinition);
     }
 
     private ServerResponse serverApiErrorResponse(ApiErrorResponse apiErrorResponse) {
@@ -80,6 +88,12 @@ public abstract class AbstractScrapperHandlerFunction implements HandlerFunction
         }
     }
 
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        this.transactionOperations = new TransactionTemplate(beanFactory
+                .getBean(PlatformTransactionManager.class), this.transactionDefinition);
+    }
+
     /**
      * Преобразует объект валидации в http ответ со статусом 400
      *
@@ -96,5 +110,17 @@ public abstract class AbstractScrapperHandlerFunction implements HandlerFunction
                                 entry.getKey(),
                                 entry.getValue()))
                         .collect(Collectors.joining("],[", "[", "]"))));
+    }
+
+    /**
+     * Извлекает заголовок по его названию из http-запроса
+     *
+     * @param request    запрос
+     * @param headerName название заголовка
+     *
+     * @return {@code empty}, если заголовок не найден
+     */
+    protected Optional<String> extractHeader(ServerRequest request, String headerName) {
+        return Optional.ofNullable(request.headers().firstHeader(headerName));
     }
 }
