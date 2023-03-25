@@ -30,7 +30,7 @@ public abstract class DeleteTgChatApi extends Invocation<DeleteTgChatApi.Payload
 
         public static final String ERROR_ID = "tg_chat.delete.errors.id";
 
-        private Payload(Payload.Builder builder) {
+        private Payload(Builder builder) {
             this(builder.id);
         }
 
