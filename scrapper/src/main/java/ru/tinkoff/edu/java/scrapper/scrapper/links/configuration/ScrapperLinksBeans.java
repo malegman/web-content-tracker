@@ -10,6 +10,8 @@ import org.springdoc.core.annotations.RouterOperation;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
+import org.springframework.web.servlet.function.RequestPredicates;
 import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.ServerResponse;
 import ru.tinkoff.edu.java.scrapper.common.dto.response.ApiErrorResponse;
@@ -40,11 +42,13 @@ public class ScrapperLinksBeans {
                             responseCode = "200",
                             description = "Ссылки успешно получены",
                             content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = ListLinksResponse.class))),
                     @ApiResponse(
                             responseCode = "400",
                             description = "Некорректные параметры запроса",
                             content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = ApiErrorResponse.class))),
                     @ApiResponse(
                             responseCode = "404",
@@ -58,7 +62,8 @@ public class ScrapperLinksBeans {
         handlerFunction.setBeanFactory(beanFactory);
 
         return route()
-                .POST("/links",
+                .GET("/links",
+                        RequestPredicates.accept(MediaType.APPLICATION_JSON),
                         handlerFunction)
                 .build();
     }

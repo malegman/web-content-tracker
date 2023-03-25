@@ -10,6 +10,7 @@ import org.springdoc.core.annotations.RouterOperation;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.ServerResponse;
 import ru.tinkoff.edu.java.scrapper.common.dto.response.ApiErrorResponse;
@@ -45,6 +46,7 @@ public class ScrapperTgChatBeans {
                             responseCode = "400",
                             description = "Некорректные параметры запроса",
                             content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = ApiErrorResponse.class)))}))
     public RouterFunction<ServerResponse> registerTgChatRouterFunction(
             final BeanFactory beanFactory,
@@ -80,6 +82,7 @@ public class ScrapperTgChatBeans {
                             responseCode = "400",
                             description = "Некорректные параметры запроса",
                             content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = ApiErrorResponse.class)))}))
     public RouterFunction<ServerResponse> deleteTgChatRouterFunction(
             final BeanFactory beanFactory,
