@@ -3,6 +3,7 @@ package ru.tinkoff.edu.java.scrapper.scrapper.shared.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.tinkoff.edu.java.scrapper.scrapper.shared.application.spi.AddLinkSpi;
+import ru.tinkoff.edu.java.scrapper.scrapper.shared.application.spi.DeleteLinkSpi;
 import ru.tinkoff.edu.java.scrapper.scrapper.shared.application.spi.FindLinksSpi;
 
 import java.util.List;
@@ -18,6 +19,12 @@ public class SharedLinksBeans {
 
     @Bean
     public AddLinkSpi addLinkSpi() {
+        // TODO реализация на данный момент неизвестна
+        return (tgChatId, url) -> null;
+    }
+
+    @Bean
+    public DeleteLinkSpi deleteLinkSpi() {
         // TODO реализация на данный момент неизвестна
         return (tgChatId, url) -> null;
     }
