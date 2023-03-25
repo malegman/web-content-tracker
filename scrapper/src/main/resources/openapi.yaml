@@ -24,7 +24,7 @@ paths:
             type: integer
             format: int64
       responses:
-        '200':
+        '204':
           description: Чат зарегистрирован
         '400':
           description: Некорректные параметры запроса
@@ -46,7 +46,7 @@ paths:
             type: integer
             format: int64
       responses:
-        '200':
+        '204':
           description: Чат успешно удалён
         '400':
           description: Некорректные параметры запроса
