@@ -13,6 +13,9 @@ import ru.tinkoff.edu.java.scrapper.scrapper.tgchat.api.RegisterTgChatApi.Result
 
 import java.util.Objects;
 
+/**
+ * Обработчик запроса на регистрацию чата телеграмма
+ */
 public final class RegisterTgChatHandlerFunction extends AbstractScrapperHandlerFunction {
 
     private static final TransactionDefinition TRANSACTION_DEFINITION;
