@@ -28,6 +28,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public abstract class AbstractScrapperHandlerFunction implements HandlerFunction<ServerResponse>, BeanFactoryAware {
 
+    public static final ServerResponse SR_NO_CONTENT = ServerResponse.noContent().build();
+
     private final TransactionDefinition transactionDefinition;
     private TransactionOperations transactionOperations;
 
