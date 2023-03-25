@@ -39,15 +39,15 @@ public final class FindLinksHandlerFunction extends AbstractScrapperHandlerFunct
     @Override
     protected ServerResponse handleInternal(ServerRequest request, TransactionStatus status) {
 
-        final var requestMapper = new ResultToServerResponseMapper();
+        final var resultMapper = new ResultToServerResponseMapper();
 
         this.findLinksApi.invoke(builder -> builder
                         .id(this.extractHeader(request, "Tg-Chat-Id")
                                 .map(TgChatId::valueOf).orElse(null)))
                 .onFailed(status::setRollbackOnly)
-                .visit(requestMapper);
+                .visit(resultMapper);
 
-        return requestMapper.serverResponse;
+        return resultMapper.serverResponse;
     }
 
     private final class ResultToServerResponseMapper implements Visitor {
