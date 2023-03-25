@@ -1,10 +1,18 @@
 package ru.tinkoff.edu.java.scrapper.scrapper.tgchat.configuration;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springdoc.core.annotations.RouterOperation;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.ServerResponse;
+import ru.tinkoff.edu.java.scrapper.common.dto.response.ApiErrorResponse;
 import ru.tinkoff.edu.java.scrapper.scrapper.shared.application.spi.DeleteTgChatSpi;
 import ru.tinkoff.edu.java.scrapper.scrapper.shared.application.spi.RegisterTgChatSpi;
 import ru.tinkoff.edu.java.scrapper.scrapper.tgchat.api.spring.web.DeleteTgChatHandlerFunction;
@@ -18,6 +26,26 @@ import static org.springframework.web.servlet.function.RouterFunctions.route;
 public class ScrapperTgChatBeans {
 
     @Bean
+    @RouterOperation(operation = @Operation(
+            tags = {"tg-chat"},
+            operationId = "registerTgChat",
+            summary = "Зарегистрировать чат",
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "Идентификатор чата",
+                            schema = @Schema(implementation = Long.class))},
+            responses = {
+                    @ApiResponse(
+                            responseCode = "204",
+                            description = "Чат зарегистрирован"),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Некорректные параметры запроса",
+                            content = @Content(
+                                    schema = @Schema(implementation = ApiErrorResponse.class)))}))
     public RouterFunction<ServerResponse> registerTgChatRouterFunction(
             final BeanFactory beanFactory,
             final RegisterTgChatSpi registerTgChatSpi) {
@@ -33,6 +61,26 @@ public class ScrapperTgChatBeans {
     }
 
     @Bean
+    @RouterOperation(operation = @Operation(
+            tags = {"tg-chat"},
+            operationId = "deleteTgChat",
+            summary = "Удалить чат",
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "Идентификатор чата",
+                            schema = @Schema(implementation = Long.class))},
+            responses = {
+                    @ApiResponse(
+                            responseCode = "204",
+                            description = "Чат успешно удалён"),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Некорректные параметры запроса",
+                            content = @Content(
+                                    schema = @Schema(implementation = ApiErrorResponse.class)))}))
     public RouterFunction<ServerResponse> deleteTgChatRouterFunction(
             final BeanFactory beanFactory,
             final DeleteTgChatSpi deleteTgChatSpi) {
