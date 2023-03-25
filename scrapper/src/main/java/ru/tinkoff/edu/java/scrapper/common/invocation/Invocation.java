@@ -11,10 +11,10 @@ import java.util.function.Consumer;
  * @param <P> класс, описывающий полезную нагрузку операции
  * @param <B> класс-строитель полезной нагрузки
  * @param <R> класс, описывающий результат операции
- * @param <H> класс-обработчик результата операции
+ * @param <V> класс-посетитель результата операции
  */
 public abstract class Invocation<P extends Invocation.Payload, B extends Invocation.Payload.Builder<P>,
-        R extends Invocation.Result<R, H>, H> {
+        R extends Invocation.Result<R, V>, V> {
 
     /**
      * Метод для выполнения операции
@@ -96,9 +96,9 @@ public abstract class Invocation<P extends Invocation.Payload, B extends Invocat
      * Интерфейс, описывающий результат операции
      *
      * @param <R> класс-результат, реализующий данный интерфейс
-     * @param <H> класс, обрабатывающий результат операции
+     * @param <V> класс-посетитель, обрабатывающий результат операции
      */
-    public interface Result<R extends Result<R, H>, H> {
+    public interface Result<R extends Result<R, V>, V> {
 
         /**
          * Проверяет, является ли результат провальным
@@ -116,7 +116,7 @@ public abstract class Invocation<P extends Invocation.Payload, B extends Invocat
          *
          * @return данный результат
          */
-        default Result<R, H> onFailed(final Runnable runnable) {
+        default Result<R, V> onFailed(final Runnable runnable) {
             if (this.isFailed()) {
                 runnable.run();
             }
@@ -126,12 +126,8 @@ public abstract class Invocation<P extends Invocation.Payload, B extends Invocat
         /**
          * Метод для обработки результата операции
          *
-         * @param handler обработчик результата операции
-         *
-         * @return обработанный результат
-         *
-         * @param <T> тип, в который обработчик преобразует результат
+         * @param visitor посетитель результата операции
          */
-        <T> T handle(H handler);
+        void visit(V visitor);
     }
 }
