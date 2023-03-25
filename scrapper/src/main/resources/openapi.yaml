@@ -65,10 +65,12 @@ paths:
       tags:
         - links
       summary: Получить все отслеживаемые ссылки
+      operationId: getLinks
       parameters:
         - name: Tg-Chat-Id
           in: header
           required: true
+          description: Идентификатор чата
           schema:
             type: integer
             format: int64
@@ -91,10 +93,12 @@ paths:
       tags:
         - links
       summary: Добавить отслеживание ссылки
+      operationId: addLink
       parameters:
         - name: Tg-Chat-Id
           in: header
           required: true
+          description: Идентификатор чата
           schema:
             type: integer
             format: int64
@@ -123,10 +127,12 @@ paths:
       tags:
         - links
       summary: Убрать отслеживание ссылки
+      operationId: deleteLink
       parameters:
         - name: Tg-Chat-Id
           in: header
           required: true
+          description: Идентификатор чата
           schema:
             type: integer
             format: int64
