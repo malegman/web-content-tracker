@@ -16,10 +16,12 @@ paths:
       tags:
         - tg-chat
       summary: Зарегистрировать чат
+      operationId: registerTgChat
       parameters:
         - name: id
           in: path
           required: true
+          description: Идентификатор чата
           schema:
             type: integer
             format: int64
@@ -38,10 +40,12 @@ paths:
       tags:
         - tg-chat
       summary: Удалить чат
+      operationId: deleteTgChat
       parameters:
         - name: id
           in: path
           required: true
+          description: Идентификатор чата
           schema:
             type: integer
             format: int64
