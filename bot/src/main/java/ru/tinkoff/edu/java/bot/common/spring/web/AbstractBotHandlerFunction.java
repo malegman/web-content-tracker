@@ -1,15 +1,7 @@
 package ru.tinkoff.edu.java.bot.common.spring.web;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.http.MediaType;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionOperations;
-import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.servlet.function.HandlerFunction;
 import org.springframework.web.servlet.function.ServerRequest;
 import org.springframework.web.servlet.function.ServerResponse;
@@ -17,7 +9,6 @@ import ru.tinkoff.edu.java.bot.common.dto.response.ApiErrorResponse;
 import ru.tinkoff.edu.java.bot.common.validation.Validation;
 
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -25,16 +16,9 @@ import java.util.stream.Collectors;
  * Абстрактный обработчик HTTP запросов, реализует spring интерфейс {@link HandlerFunction}
  */
 @Slf4j
-public abstract class AbstractScrapperHandlerFunction implements HandlerFunction<ServerResponse>, BeanFactoryAware {
+public abstract class AbstractBotHandlerFunction implements HandlerFunction<ServerResponse> {
 
     public static final ServerResponse SR_NO_CONTENT = ServerResponse.noContent().build();
-
-    private final TransactionDefinition transactionDefinition;
-    private TransactionOperations transactionOperations;
-
-    public AbstractScrapperHandlerFunction(final TransactionDefinition transactionDefinition) {
-        this.transactionDefinition = Objects.requireNonNull(transactionDefinition);
-    }
 
     private ServerResponse serverApiErrorResponse(ApiErrorResponse apiErrorResponse) {
         return ServerResponse
@@ -44,16 +28,15 @@ public abstract class AbstractScrapperHandlerFunction implements HandlerFunction
     }
 
     /**
-     * Обрабатывает http запрос в рамках транзакции
+     * Обрабатывает http запрос
      *
      * @param request обрабатываемый запрос
-     * @param status  статус транзакции
      *
      * @return http ответ
      *
      * @throws Exception если произошла ошибка обработки запроса
      */
-    protected abstract ServerResponse handleInternal(ServerRequest request, TransactionStatus status) throws Exception;
+    protected abstract ServerResponse handleInternal(ServerRequest request) throws Exception;
 
     /**
      * Обрабатывает http запрос
@@ -66,13 +49,8 @@ public abstract class AbstractScrapperHandlerFunction implements HandlerFunction
     public ServerResponse handle(final ServerRequest request) {
 
         try {
-            return this.transactionOperations.execute(status -> {
-                try {
-                    return this.handleInternal(request, status);
-                } catch (Exception exception) {
-                    throw new RuntimeException(exception);
-                }
-            });
+            return this.handleInternal(request);
+
         } catch (Exception exception) {
             final var exceptionId = UUID.randomUUID();
             final var exceptionMessage = exception.getMessage();
@@ -87,12 +65,6 @@ public abstract class AbstractScrapperHandlerFunction implements HandlerFunction
                             .map(StackTraceElement::toString)
                             .toList()));
         }
-    }
-
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        this.transactionOperations = new TransactionTemplate(beanFactory
-                .getBean(PlatformTransactionManager.class), this.transactionDefinition);
     }
 
     /**
