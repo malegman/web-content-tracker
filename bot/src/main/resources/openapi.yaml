@@ -5,15 +5,21 @@ info:
   contact:
     name: Alexander Biryukov
     url: https://github.com
+tags:
+  - name: bot
+    description: Работа с ботом
 paths:
   "/updates":
     post:
+      tags:
+        - bot
       summary: Отправить обновление
+      operationId: sendUpdates
       requestBody:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/LinkUpdate"
+              "$ref": "#/components/schemas/LinkUpdateRequest"
         required: true
       responses:
         '200':
@@ -41,7 +47,7 @@ components:
           type: array
           items:
             type: string
-    LinkUpdate:
+    LinkUpdateRequest:
       type: object
       properties:
         id:
