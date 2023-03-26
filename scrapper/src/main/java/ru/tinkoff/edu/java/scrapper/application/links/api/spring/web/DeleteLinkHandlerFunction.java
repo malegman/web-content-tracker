@@ -6,7 +6,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.servlet.function.ServerRequest;
 import org.springframework.web.servlet.function.ServerResponse;
-import ru.tinkoff.edu.java.scrapper.common.spring.mvc.AbstractScrapperHandlerFunction;
+import ru.tinkoff.edu.java.scrapper.common.spring.web.AbstractScrapperHandlerFunction;
 import ru.tinkoff.edu.java.scrapper.application.links.api.DeleteLinkApi;
 import ru.tinkoff.edu.java.scrapper.application.links.api.DeleteLinkApi.Result.*;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.request.RemoveLinkRequest;

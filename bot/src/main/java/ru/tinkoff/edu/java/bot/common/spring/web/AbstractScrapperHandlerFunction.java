@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.common.spring.mvc;
+package ru.tinkoff.edu.java.bot.common.spring.web;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -13,12 +13,11 @@ import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.servlet.function.HandlerFunction;
 import org.springframework.web.servlet.function.ServerRequest;
 import org.springframework.web.servlet.function.ServerResponse;
-import ru.tinkoff.edu.java.scrapper.common.dto.response.ApiErrorResponse;
-import ru.tinkoff.edu.java.scrapper.common.validation.Validation;
+import ru.tinkoff.edu.java.bot.common.dto.response.ApiErrorResponse;
+import ru.tinkoff.edu.java.bot.common.validation.Validation;
 
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -112,17 +111,5 @@ public abstract class AbstractScrapperHandlerFunction implements HandlerFunction
                                 entry.getKey(),
                                 entry.getValue()))
                         .collect(Collectors.joining("],[", "[", "]"))));
-    }
-
-    /**
-     * Извлекает заголовок по его названию из http-запроса
-     *
-     * @param request    запрос
-     * @param headerName название заголовка
-     *
-     * @return {@code empty}, если заголовок не найден
-     */
-    protected Optional<String> extractHeader(ServerRequest request, String headerName) {
-        return Optional.ofNullable(request.headers().firstHeader(headerName));
     }
 }
