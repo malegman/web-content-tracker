@@ -3,3 +3,7 @@ app:
 springdoc:
   swagger-ui:
     path: /swagger-ui
+spring:
+  datasource:
+    url: "jdbc:postgres://localhost:5432/postgres"
+    driver-class-name: org.postgresql.Driver
