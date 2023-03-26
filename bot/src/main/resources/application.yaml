@@ -1,5 +1,5 @@
 app:
-  test: "scrapper_test"
+  test: "bot_test"
 springdoc:
   swagger-ui:
     path: /swagger-ui
