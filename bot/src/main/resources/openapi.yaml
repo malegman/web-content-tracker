@@ -22,7 +22,7 @@ paths:
               "$ref": "#/components/schemas/LinkUpdateRequest"
         required: true
       responses:
-        '200':
+        '204':
           description: Обновление обработано
         '400':
           description: Некорректные параметры запроса
