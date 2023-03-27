@@ -9,14 +9,12 @@ import org.springdoc.core.annotations.RouterOperation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
-import org.springframework.web.servlet.function.RequestPredicates;
-import org.springframework.web.servlet.function.RouterFunction;
-import org.springframework.web.servlet.function.ServerResponse;
+import org.springframework.web.servlet.function.*;
 import ru.tinkoff.edu.java.bot.application.client.api.spring.web.SendUpdatesHandlerFunction;
 import ru.tinkoff.edu.java.bot.application.client.usecase.SendUpdatesUseCase;
 import ru.tinkoff.edu.java.bot.application.shared.application.dto.request.LinkUpdateRequest;
 import ru.tinkoff.edu.java.bot.application.shared.application.spi.SendUpdatesSpi;
-import ru.tinkoff.edu.java.bot.common.dto.response.ApiErrorResponse;
+import ru.tinkoff.edu.java.bot.common.errors.ApiErrorResponse;
 
 import static org.springframework.web.servlet.function.RouterFunctions.route;
 

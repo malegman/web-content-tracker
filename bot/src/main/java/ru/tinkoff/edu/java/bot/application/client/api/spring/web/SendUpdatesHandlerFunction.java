@@ -10,6 +10,7 @@ import ru.tinkoff.edu.java.bot.application.client.api.SendUpdatesApi.Result.Visi
 import ru.tinkoff.edu.java.bot.application.shared.application.dto.request.LinkUpdateRequest;
 import ru.tinkoff.edu.java.bot.application.shared.domain.id.LinkId;
 import ru.tinkoff.edu.java.bot.application.shared.domain.id.TgChatId;
+import ru.tinkoff.edu.java.bot.common.errors.ValidationFailedException;
 import ru.tinkoff.edu.java.bot.common.spring.web.AbstractBotHandlerFunction;
 
 import java.util.Objects;
@@ -43,7 +44,7 @@ public final class SendUpdatesHandlerFunction extends AbstractBotHandlerFunction
         return resultMapper.serverResponse;
     }
 
-    private final class ResultToServerResponseMapper implements Visitor {
+    private final static class ResultToServerResponseMapper implements Visitor {
 
         private ServerResponse serverResponse;
 
@@ -54,7 +55,7 @@ public final class SendUpdatesHandlerFunction extends AbstractBotHandlerFunction
 
         @Override
         public void onValidationFailed(ValidationFailed result) {
-            this.serverResponse = badRequestFromValidation(result.validation());
+            throw new ValidationFailedException(result.validation());
         }
 
         @Override
