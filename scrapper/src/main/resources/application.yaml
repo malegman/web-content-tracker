@@ -5,5 +5,7 @@ springdoc:
     path: /swagger-ui
 spring:
   datasource:
-    url: "jdbc:postgres://localhost:5432/postgres"
     driver-class-name: org.postgresql.Driver
+    url: "jdbc:postgresql://localhost:5432/postgres"
+    username: postgres
+    password: postgres
