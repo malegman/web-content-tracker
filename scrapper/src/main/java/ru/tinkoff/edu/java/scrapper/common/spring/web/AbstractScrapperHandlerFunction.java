@@ -37,13 +37,6 @@ public abstract class AbstractScrapperHandlerFunction implements HandlerFunction
         this.transactionDefinition = Objects.requireNonNull(transactionDefinition);
     }
 
-    private ServerResponse serverApiErrorResponse(ApiErrorResponse apiErrorResponse) {
-        return ServerResponse
-                .badRequest()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(apiErrorResponse);
-    }
-
     /**
      * Обрабатывает http запрос в рамках транзакции
      *
@@ -69,16 +62,12 @@ public abstract class AbstractScrapperHandlerFunction implements HandlerFunction
         try {
             return this.transactionOperations.execute(status -> {
                 try {
-                    return this.handleInternal(request, status);
+                    return handleInternal(request, status);
                 } catch (Exception exception) {
-                    throw new RuntimeException(exception);
+                    return this.handleException(exception);
                 }
             });
         } catch (Exception exception) {
-            final var exceptionId = UUID.randomUUID();
-            final var exceptionMessage = exception.getMessage();
-            log.error("Exception id: {}. Exception message: {}", exceptionId, exceptionMessage);
-
             return this.handleException(exception);
         }
     }
@@ -90,6 +79,10 @@ public abstract class AbstractScrapperHandlerFunction implements HandlerFunction
     }
 
     private ServerResponse handleException(final Exception exception) {
+
+        final var exceptionId = UUID.randomUUID();
+        final var exceptionMessage = exception.getMessage();
+        log.error("Exception id: {}. Exception message: {}", exceptionId, exceptionMessage);
 
         final var apiErrorResponseBuilder = ApiErrorResponse.builder();
 
@@ -103,7 +96,7 @@ public abstract class AbstractScrapperHandlerFunction implements HandlerFunction
                 .badRequest()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(apiErrorResponseBuilder
-                        .exceptionMessage(exception.getMessage())
+                        .exceptionMessage(exceptionMessage)
                         .exceptionName(exception.getClass().getName())
                         .stacktrace(Arrays.stream(exception.getStackTrace())
                                 .map(StackTraceElement::toString)
