@@ -21,10 +21,10 @@ public final class DeleteLinkUseCase extends DeleteLinkApi {
     protected Result invokeInternal(Payload payload) {
 
         try {
-            final var url = payload.url();
+            final var url = payload.link();
             final var linkId = this.deleteLinkSpi.deleteLink(payload.tgChatId(), url);
 
-            return Result.success(new LinkDto(linkId, payload.url()));
+            return Result.success(new LinkDto(linkId, payload.link()));
         } catch (Exception e) {
             return Result.executionFailed(e);
         }

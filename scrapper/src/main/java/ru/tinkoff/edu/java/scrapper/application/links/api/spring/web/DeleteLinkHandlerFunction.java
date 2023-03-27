@@ -50,7 +50,7 @@ public final class DeleteLinkHandlerFunction extends AbstractScrapperHandlerFunc
         this.deleteLinkApi.invoke(builder -> builder
                         .tgChatId(this.extractHeader(request, "Tg-Chat-Id")
                                 .map(TgChatId::valueOf).orElse(null))
-                        .url(requestPayload.link()))
+                        .link(requestPayload.link()))
                 .onFailed(status::setRollbackOnly)
                 .visit(resultMapper);
 

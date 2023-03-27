@@ -13,9 +13,9 @@ public interface AddLinkSpi {
      * Метод для добавления отслеживаемой ссылки в чат телеграмма
      *
      * @param tgChatId идентификатор чата
-     * @param url      ссылка
+     * @param link      ссылка
      *
      * @return идентификатор добавленной ссылки
      */
-    LinkId addLink(TgChatId tgChatId, String url);
+    LinkId addLink(TgChatId tgChatId, String link);
 }

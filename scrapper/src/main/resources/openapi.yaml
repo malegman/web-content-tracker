@@ -165,7 +165,7 @@ components:
         id:
           type: integer
           format: int64
-        url:
+        link:
           type: string
           format: uri
     ApiErrorResponse:

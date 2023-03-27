@@ -25,16 +25,16 @@ public abstract class AddLinkApi extends Invocation<AddLinkApi.Payload,
         return new Payload.Builder();
     }
 
-    public record Payload(TgChatId tgChatId, String url) implements Invocation.Payload {
+    public record Payload(TgChatId tgChatId, String link) implements Invocation.Payload {
 
         public static final String PROP_TG_CHAT_ID = "tgChatId";
-        public static final String PROP_URL = "url";
+        public static final String PROP_LINK = "link";
 
         public static final String ERROR_TG_CHAT_ID = "links.add.errors.tg_chat_id";
-        public static final String ERROR_URL = "links.add.errors.url";
+        public static final String ERROR_LINK = "links.add.errors.link";
 
         private Payload(Builder builder) {
-            this(builder.tgChatId, builder.url);
+            this(builder.tgChatId, builder.link);
         }
 
         @Override
@@ -46,8 +46,8 @@ public abstract class AddLinkApi extends Invocation<AddLinkApi.Payload,
                 validation.registerFieldError(PROP_TG_CHAT_ID, ERROR_TG_CHAT_ID);
             }
 
-            if (Objects.isNull(this.url) || this.url.isBlank()) {
-                validation.registerFieldError(PROP_URL, ERROR_URL);
+            if (Objects.isNull(this.link) || this.link.isBlank()) {
+                validation.registerFieldError(PROP_LINK, ERROR_LINK);
             }
 
             return validation;
@@ -57,15 +57,15 @@ public abstract class AddLinkApi extends Invocation<AddLinkApi.Payload,
         public static final class Builder implements Invocation.Payload.Builder<Payload> {
 
             private TgChatId tgChatId;
-            private String url;
+            private String link;
 
             public Builder tgChatId(TgChatId value) {
                 this.tgChatId = value;
                 return this;
             }
 
-            public Builder url(String value) {
-                this.url = value;
+            public Builder link(String value) {
+                this.link = value;
                 return this;
             }
 

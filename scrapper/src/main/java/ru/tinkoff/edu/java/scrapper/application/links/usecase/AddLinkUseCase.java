@@ -21,10 +21,10 @@ public final class AddLinkUseCase extends AddLinkApi {
     protected Result invokeInternal(Payload payload) {
 
         try {
-            final var url = payload.url();
-            final var linkId = this.addLinkSpi.addLink(payload.tgChatId(), url);
+            final var link = payload.link();
+            final var linkId = this.addLinkSpi.addLink(payload.tgChatId(), link);
 
-            return Result.success(new LinkDto(linkId, payload.url()));
+            return Result.success(new LinkDto(linkId, payload.link()));
         } catch (Exception e) {
             return Result.executionFailed(e);
         }

@@ -6,9 +6,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.tinkoff.edu.java.linkparser.github.GitHubUrlParser;
+import ru.tinkoff.edu.java.linkparser.github.GitHubLinkParser;
 import ru.tinkoff.edu.java.linkparser.github.payload.GitHubPayload;
-import ru.tinkoff.edu.java.linkparser.stackoverflow.StackOverflowUrlParser;
+import ru.tinkoff.edu.java.linkparser.stackoverflow.StackOverflowLinkParser;
 import ru.tinkoff.edu.java.linkparser.stackoverflow.domain.id.QuestionId;
 import ru.tinkoff.edu.java.linkparser.stackoverflow.payload.StackOverflowPayload;
 
@@ -17,21 +17,21 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
-public class UrlParserTest {
+public class LinkParserTest {
 
     @Mock
-    GitHubUrlParser.Result.Processor<String> gitHubPayloadProcessor;
+    GitHubLinkParser.Result.Processor<String> gitHubPayloadProcessor;
 
     @Mock
-    StackOverflowUrlParser.Result.Processor<String> stackOverflowPayloadProcessor;
+    StackOverflowLinkParser.Result.Processor<String> stackOverflowPayloadProcessor;
 
-    UrlParser<String> parser;
+    LinkParser<String> parser;
 
     @BeforeEach
     void setUp() {
-        this.parser = UrlParser.link(
-                new GitHubUrlParser<>(this.gitHubPayloadProcessor),
-                new StackOverflowUrlParser<>(this.stackOverflowPayloadProcessor));
+        this.parser = LinkParser.link(
+                new GitHubLinkParser<>(this.gitHubPayloadProcessor),
+                new StackOverflowLinkParser<>(this.stackOverflowPayloadProcessor));
     }
 
     @Test
@@ -43,7 +43,7 @@ public class UrlParserTest {
         final var payload = new GitHubPayload(user, repo);
 
         final var githubSuccess = "githubSuccess";
-        final var success = GitHubUrlParser.Result.success(payload, this.gitHubPayloadProcessor);
+        final var success = GitHubLinkParser.Result.success(payload, this.gitHubPayloadProcessor);
 
         Mockito.doReturn(githubSuccess).when(this.gitHubPayloadProcessor).processSuccess(success);
 
@@ -64,7 +64,7 @@ public class UrlParserTest {
         final var payload = new StackOverflowPayload(questionId);
 
         final var stackoverflowSuccess = "stackoverflowSuccess";
-        final var success = StackOverflowUrlParser.Result.success(payload, this.stackOverflowPayloadProcessor);
+        final var success = StackOverflowLinkParser.Result.success(payload, this.stackOverflowPayloadProcessor);
 
         Mockito.doReturn(stackoverflowSuccess).when(this.stackOverflowPayloadProcessor).processSuccess(success);
 
@@ -85,7 +85,7 @@ public class UrlParserTest {
         final var result = this.parser.parse(link);
 
         assertTrue(result.isFailed());
-        assertEquals(UrlParser.Result.failed(), result);
+        assertEquals(LinkParser.Result.failed(), result);
         assertNull(result.process());
         verifyNoInteractions(this.stackOverflowPayloadProcessor, this.gitHubPayloadProcessor);
     }
