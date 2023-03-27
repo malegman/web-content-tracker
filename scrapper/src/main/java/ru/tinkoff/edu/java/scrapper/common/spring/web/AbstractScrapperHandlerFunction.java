@@ -13,14 +13,14 @@ import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.servlet.function.HandlerFunction;
 import org.springframework.web.servlet.function.ServerRequest;
 import org.springframework.web.servlet.function.ServerResponse;
-import ru.tinkoff.edu.java.scrapper.common.dto.response.ApiErrorResponse;
-import ru.tinkoff.edu.java.scrapper.common.validation.Validation;
+import ru.tinkoff.edu.java.scrapper.common.errors.ApiErrorResponse;
+import ru.tinkoff.edu.java.scrapper.common.errors.ErrorType;
+import ru.tinkoff.edu.java.scrapper.common.errors.ValidationFailedException;
 
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * Абстрактный обработчик HTTP запросов, реализует spring интерфейс {@link HandlerFunction}
@@ -79,14 +79,7 @@ public abstract class AbstractScrapperHandlerFunction implements HandlerFunction
             final var exceptionMessage = exception.getMessage();
             log.error("Exception id: {}. Exception message: {}", exceptionId, exceptionMessage);
 
-            return this.serverApiErrorResponse(new ApiErrorResponse(
-                    exceptionMessage,
-                    exceptionId.toString(),
-                    exception.getClass().getName(),
-                    exceptionMessage,
-                    Arrays.stream(exception.getStackTrace())
-                            .map(StackTraceElement::toString)
-                            .toList()));
+            return this.handleException(exception);
         }
     }
 
@@ -96,22 +89,26 @@ public abstract class AbstractScrapperHandlerFunction implements HandlerFunction
                 .getBean(PlatformTransactionManager.class), this.transactionDefinition);
     }
 
-    /**
-     * Преобразует объект валидации в http ответ со статусом 400
-     *
-     * @param validation объект валидации
-     *
-     * @return http ответ со статусом 400
-     */
-    protected ServerResponse badRequestFromValidation(final Validation validation) {
-        return this.serverApiErrorResponse(new ApiErrorResponse(
-                validation.getFieldErrors()
-                        .entrySet()
-                        .stream()
-                        .map(entry -> String.format("Field: %s. Errors: %s.",
-                                entry.getKey(),
-                                entry.getValue()))
-                        .collect(Collectors.joining("],[", "[", "]"))));
+    private ServerResponse handleException(final Exception exception) {
+
+        final var apiErrorResponseBuilder = ApiErrorResponse.builder();
+
+        if (exception instanceof ValidationFailedException) {
+            apiErrorResponseBuilder.errorType(ErrorType.VALIDATION_FAILED);
+        } else {
+            apiErrorResponseBuilder.errorType(ErrorType.EXECUTION_FAILED);
+        }
+
+        return ServerResponse
+                .badRequest()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(apiErrorResponseBuilder
+                        .exceptionMessage(exception.getMessage())
+                        .exceptionName(exception.getClass().getName())
+                        .stacktrace(Arrays.stream(exception.getStackTrace())
+                                .map(StackTraceElement::toString)
+                                .toList())
+                        .build());
     }
 
     /**

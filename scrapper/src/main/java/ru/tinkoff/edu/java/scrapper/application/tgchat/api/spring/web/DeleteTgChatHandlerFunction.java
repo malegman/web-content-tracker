@@ -5,6 +5,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.servlet.function.ServerRequest;
 import org.springframework.web.servlet.function.ServerResponse;
+import ru.tinkoff.edu.java.scrapper.common.errors.ValidationFailedException;
 import ru.tinkoff.edu.java.scrapper.common.spring.web.AbstractScrapperHandlerFunction;
 import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.TgChatId;
 import ru.tinkoff.edu.java.scrapper.application.tgchat.api.DeleteTgChatApi;
@@ -47,7 +48,7 @@ public final class DeleteTgChatHandlerFunction extends AbstractScrapperHandlerFu
         return resultMapper.serverResponse;
     }
 
-    private final class ResultToServerResponseMapper implements Visitor {
+    private static final class ResultToServerResponseMapper implements Visitor {
 
         private ServerResponse serverResponse;
 
@@ -58,7 +59,7 @@ public final class DeleteTgChatHandlerFunction extends AbstractScrapperHandlerFu
 
         @Override
         public void onValidationFailed(ValidationFailed result) {
-            this.serverResponse = badRequestFromValidation(result.validation());
+            throw new ValidationFailedException(result.validation());
         }
 
         @Override
