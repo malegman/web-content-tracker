@@ -33,7 +33,7 @@ public abstract class FindLinksApi extends Invocation<FindLinksApi.Payload,
         public static final String ERROR_TG_CHAT_ID = "links.find.errors.tg_chat_id";
 
         private Payload(Builder builder) {
-            this(builder.id);
+            this(builder.tgChatId);
         }
 
         @Override
@@ -51,10 +51,10 @@ public abstract class FindLinksApi extends Invocation<FindLinksApi.Payload,
         @NoArgsConstructor(access = AccessLevel.PRIVATE)
         public static final class Builder implements Invocation.Payload.Builder<Payload> {
 
-            private TgChatId id;
+            private TgChatId tgChatId;
 
-            public Payload.Builder id(TgChatId value) {
-                this.id = value;
+            public Builder tgChatId(TgChatId value) {
+                this.tgChatId = value;
                 return this;
             }
 

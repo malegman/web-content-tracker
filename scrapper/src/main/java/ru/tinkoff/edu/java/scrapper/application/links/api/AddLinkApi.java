@@ -34,7 +34,7 @@ public abstract class AddLinkApi extends Invocation<AddLinkApi.Payload,
         public static final String ERROR_URL = "links.add.errors.url";
 
         private Payload(Builder builder) {
-            this(builder.id, builder.url);
+            this(builder.tgChatId, builder.url);
         }
 
         @Override
@@ -56,11 +56,11 @@ public abstract class AddLinkApi extends Invocation<AddLinkApi.Payload,
         @NoArgsConstructor(access = AccessLevel.PRIVATE)
         public static final class Builder implements Invocation.Payload.Builder<Payload> {
 
-            private TgChatId id;
+            private TgChatId tgChatId;
             private String url;
 
-            public Builder id(TgChatId value) {
-                this.id = value;
+            public Builder tgChatId(TgChatId value) {
+                this.tgChatId = value;
                 return this;
             }
 

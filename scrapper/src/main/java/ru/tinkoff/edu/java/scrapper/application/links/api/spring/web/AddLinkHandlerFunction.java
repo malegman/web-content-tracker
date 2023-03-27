@@ -6,6 +6,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.servlet.function.ServerRequest;
 import org.springframework.web.servlet.function.ServerResponse;
+import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.LinkId;
 import ru.tinkoff.edu.java.scrapper.common.errors.ValidationFailedException;
 import ru.tinkoff.edu.java.scrapper.common.spring.web.AbstractScrapperHandlerFunction;
 import ru.tinkoff.edu.java.scrapper.application.links.api.AddLinkApi;
@@ -44,9 +45,9 @@ public final class AddLinkHandlerFunction extends AbstractScrapperHandlerFunctio
         final var requestPayload = request.body(AddLinkRequest.class);
 
         this.addLinkApi.invoke(builder -> builder
-                    .id(this.extractHeader(request, "Tg-Chat-Id")
+                    .tgChatId(this.extractHeader(request, "Tg-Chat-Id")
                             .map(TgChatId::valueOf).orElse(null))
-                    .url(requestPayload.url()))
+                    .url(requestPayload.link()))
                 .onFailed(status::setRollbackOnly)
                 .visit(resultMapper);
 
@@ -66,7 +67,7 @@ public final class AddLinkHandlerFunction extends AbstractScrapperHandlerFunctio
                     .ok()
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(new LinkResponse(
-                            link.id().value(),
+                            LinkId.valueFrom(link.id()),
                             link.url()));
         }
 
