@@ -44,7 +44,7 @@ public final class SendUpdatesHandlerFunction extends AbstractBotHandlerFunction
         return resultMapper.serverResponse;
     }
 
-    private final static class ResultToServerResponseMapper implements Visitor {
+    private static final class ResultToServerResponseMapper implements Visitor {
 
         private ServerResponse serverResponse;
 
