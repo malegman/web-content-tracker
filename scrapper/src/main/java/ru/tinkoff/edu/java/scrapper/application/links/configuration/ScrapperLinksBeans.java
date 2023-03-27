@@ -15,7 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.servlet.function.RequestPredicates;
 import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.ServerResponse;
-import ru.tinkoff.edu.java.scrapper.common.dto.response.ApiErrorResponse;
+import ru.tinkoff.edu.java.scrapper.common.errors.ApiErrorResponse;
 import ru.tinkoff.edu.java.scrapper.application.links.api.spring.web.AddLinkHandlerFunction;
 import ru.tinkoff.edu.java.scrapper.application.links.api.spring.web.DeleteLinkHandlerFunction;
 import ru.tinkoff.edu.java.scrapper.application.links.api.spring.web.FindLinksHandlerFunction;
