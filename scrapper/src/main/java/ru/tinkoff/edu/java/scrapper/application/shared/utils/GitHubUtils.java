@@ -6,6 +6,8 @@ import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.GitHubRepoId;
 import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.GitHubUserId;
 
 import java.net.URI;
+import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 /**
@@ -31,7 +33,7 @@ public class GitHubUtils {
                         owner.login(),
                         GitHubUserId.valueOf(owner.id()),
                         URI.create(owner.url())),
-                response.updated_at(),
+                OffsetDateTime.from(Instant.ofEpochMilli(response.updated_at())),
                 response.watchers_count(),
                 response.size());
     }
