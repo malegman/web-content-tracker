@@ -2,7 +2,10 @@ package ru.tinkoff.edu.java.scrapper.application.shared.utils;
 
 import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.GitHubUpdatesDto;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.response.FindRepoGitHubResponse;
+import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.GitHubRepoId;
+import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.GitHubUserId;
 
+import java.net.URI;
 import java.util.Objects;
 
 /**
@@ -19,6 +22,17 @@ public class GitHubUtils {
             return null;
         }
 
-        return new GitHubUpdatesDto();
+        final var owner = response.owner();
+
+        return new GitHubUpdatesDto(
+                GitHubRepoId.valueOf(response.id()),
+                response.name(),
+                new GitHubUpdatesDto.Owner(
+                        owner.login(),
+                        GitHubUserId.valueOf(owner.id()),
+                        URI.create(owner.url())),
+                response.updated_at(),
+                response.watchers_count(),
+                response.size());
     }
 }
