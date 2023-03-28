@@ -2,7 +2,9 @@ package ru.tinkoff.edu.java.scrapper.application.shared.application.spi.web;
 
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.GitHubUpdatesDto;
+import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.response.FindRepoGitHubResponse;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.FindGitHubUpdatesSpi;
+import ru.tinkoff.edu.java.scrapper.application.shared.utils.GitHubUtils;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -19,8 +21,12 @@ public final class FindGitHubUpdatesWebClient implements FindGitHubUpdatesSpi {
     }
 
     @Override
-    public Optional<GitHubUpdatesDto> findGitHubUpdates(final String username, final String repo) {
+    public Optional<GitHubUpdatesDto> findGitHubUpdates(final String owner, final String repo) {
 
-        return Optional.empty();
+        return this.gitHubWebClient.get().uri("/repos/{owner}/{repo}", owner, repo)
+                .retrieve()
+                .bodyToMono(FindRepoGitHubResponse.class)
+                .mapNotNull(GitHubUtils::dtoFromResponse)
+                .blockOptional();
     }
 }
