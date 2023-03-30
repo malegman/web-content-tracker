@@ -1,29 +1,30 @@
 package ru.tinkoff.edu.java.bot.application.bot.api.telegram.bot;
 
+import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import ru.tinkoff.edu.java.bot.application.bot.api.StartApi;
 import ru.tinkoff.edu.java.bot.application.bot.api.StartApi.Result.*;
 import ru.tinkoff.edu.java.bot.application.shared.domain.id.TgChatId;
-import ru.tinkoff.edu.java.bot.common.telegram.bot.HandlerCommand;
+import ru.tinkoff.edu.java.bot.common.telegram.bot.HandlerFunction;
 
 import java.util.Objects;
 
-public final class StartHandlerCommand implements HandlerCommand{
+public final class StartHandlerFunction implements HandlerFunction {
 
     private final StartApi startApi;
 
-    public StartHandlerCommand(final StartApi startApi) {
+    public StartHandlerFunction(final StartApi startApi) {
         this.startApi = Objects.requireNonNull(startApi);
     }
 
     @Override
-    public SendMessage handle(Update update) {
+    public SendMessage handle(final TgChatId tgChatId, final Message message) {
 
-        final var resultMapper = new ResultMapperToSendMessage();
+        final var resultMapper = new ResultMapperToSendMessage(tgChatId);
 
         this.startApi.invoke(builder -> builder
-                .tgChatId(TgChatId.valueOf(update.message().chat().id())))
+                .tgChatId(tgChatId))
                 .visit(resultMapper);
 
         return resultMapper.sendMessage;
@@ -31,11 +32,16 @@ public final class StartHandlerCommand implements HandlerCommand{
 
     private static final class ResultMapperToSendMessage implements Visitor {
 
+        private final TgChatId tgChatId;
         private SendMessage sendMessage;
+
+        private ResultMapperToSendMessage(final TgChatId tgChatId) {
+            this.tgChatId = tgChatId;
+        }
 
         @Override
         public void onSuccess(Success result) {
-
+            this.sendMessage = new SendMessage(this.tgChatId.value(), "Start Command");
         }
 
         @Override

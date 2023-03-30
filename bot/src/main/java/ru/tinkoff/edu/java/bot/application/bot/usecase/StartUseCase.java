@@ -15,6 +15,6 @@ public final class StartUseCase extends StartApi {
 
     @Override
     protected Result invokeInternal(Payload payload) {
-        return null;
+        return Result.success();
     }
 }
