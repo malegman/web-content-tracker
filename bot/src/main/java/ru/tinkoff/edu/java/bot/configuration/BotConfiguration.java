@@ -5,52 +5,62 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.tinkoff.edu.java.bot.application.shared.domain.id.TgChatId;
-import ru.tinkoff.edu.java.bot.common.telegram.bot.HandlerManager;
-import ru.tinkoff.edu.java.bot.common.telegram.bot.RouterCommand;
+import ru.tinkoff.edu.java.bot.common.telegram.bot.CommandHandler;
+import ru.tinkoff.edu.java.bot.common.telegram.bot.CommandHandlerFactory;
+import ru.tinkoff.edu.java.bot.common.telegram.bot.CommandHandlerManager;
 
 import java.io.IOException;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Configuration
+@Slf4j
 public class BotConfiguration {
 
     @Bean
-    public HandlerManager handlerManager(ApplicationContext applicationContext) {
+    public CommandHandlerManager handlerManager(ApplicationContext applicationContext) {
 
         final var commandHandlers = applicationContext
-                .getBeansOfType(RouterCommand.class).values()
+                .getBeansOfType(CommandHandlerFactory.class).values()
                 .stream()
                 .collect(Collectors.toMap(
-                        RouterCommand::getCommand,
-                        RouterCommand::getHandler));
+                        CommandHandlerFactory::getCommand,
+                        Function.<Function<CommandHandlerManager, CommandHandler>>identity()));
 
-        return new HandlerManager(commandHandlers);
+        return new CommandHandlerManager(commandHandlers);
     }
 
     @Bean
     public TelegramBot bot(@Value("${telegram.bot.access_token}") String botToken,
-                           final HandlerManager handlerManager) {
+                           final CommandHandlerManager commandHandlerManager) {
 
         final var bot = new TelegramBot(botToken);
 
         bot.setUpdatesListener(updates -> {
             updates.forEach(update -> {
                 final var message = update.message();
-                final var handler = handlerManager.getHandler(TgChatId.valueOf(message.chat().id()), message.text());
-                bot.execute(handler.handle(update), new Callback<SendMessage, SendResponse>() {
-                    @Override
-                    public void onResponse(SendMessage sendMessage, SendResponse sendResponse) {
-                    }
+                final var tgChatId = TgChatId.valueOf(message.chat().id());
+                final var handler = commandHandlerManager.getHandler(tgChatId, message.text());
 
-                    @Override
-                    public void onFailure(SendMessage sendMessage, IOException e) {
-                    }
-                });
+                try {
+                    bot.execute(handler.handle(tgChatId, message), new Callback<SendMessage, SendResponse>() {
+                        @Override
+                        public void onResponse(SendMessage sendMessage, SendResponse sendResponse) {
+                        }
+
+                        @Override
+                        public void onFailure(SendMessage sendMessage, IOException e) {
+                        }
+                    });
+                } catch (Exception exception) {
+                    log.error(exception.getMessage());
+                }
             });
             return UpdatesListener.CONFIRMED_UPDATES_ALL;
         });
