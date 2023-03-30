@@ -1,6 +1,6 @@
-package ru.tinkoff.edu.java.bot.common.errors;
+package ru.tinkoff.edu.java.bot.common.api.errors;
 
-import ru.tinkoff.edu.java.bot.common.validation.Validation;
+import ru.tinkoff.edu.java.bot.common.api.validation.Validation;
 
 import java.util.stream.Collectors;
 

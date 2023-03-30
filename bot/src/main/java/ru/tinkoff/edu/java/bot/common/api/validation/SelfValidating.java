@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.bot.common.validation;
+package ru.tinkoff.edu.java.bot.common.api.validation;
 
 /**
  * Интерфейс самовалидирующегося объекта

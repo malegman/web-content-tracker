@@ -1,7 +1,7 @@
-package ru.tinkoff.edu.java.bot.common.invocation;
+package ru.tinkoff.edu.java.bot.common.api.invocation;
 
-import ru.tinkoff.edu.java.bot.common.validation.SelfValidating;
-import ru.tinkoff.edu.java.bot.common.validation.Validation;
+import ru.tinkoff.edu.java.bot.common.api.validation.SelfValidating;
+import ru.tinkoff.edu.java.bot.common.api.validation.Validation;
 
 import java.util.function.Consumer;
 

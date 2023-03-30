@@ -14,7 +14,7 @@ import ru.tinkoff.edu.java.bot.application.client.api.spring.web.SendUpdatesHand
 import ru.tinkoff.edu.java.bot.application.client.usecase.SendUpdatesUseCase;
 import ru.tinkoff.edu.java.bot.application.shared.application.dto.request.LinkUpdateRequest;
 import ru.tinkoff.edu.java.bot.application.shared.application.spi.SendUpdatesSpi;
-import ru.tinkoff.edu.java.bot.common.errors.ApiErrorResponse;
+import ru.tinkoff.edu.java.bot.common.api.errors.ApiErrorResponse;
 
 import static org.springframework.web.servlet.function.RouterFunctions.route;
 

@@ -9,8 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.tinkoff.edu.java.bot.common.ApiErrorResponseAssertionMatcher;
-import ru.tinkoff.edu.java.bot.common.errors.ErrorType;
-import ru.tinkoff.edu.java.bot.common.errors.ValidationFailedException;
+import ru.tinkoff.edu.java.bot.common.api.errors.ErrorType;
+import ru.tinkoff.edu.java.bot.common.api.errors.ValidationFailedException;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class SendUpdatesHandlerFunctionIT {
+public class SendUpdatesSessionHandlerIT {
 
     @Autowired
     MockMvc mockMvc;

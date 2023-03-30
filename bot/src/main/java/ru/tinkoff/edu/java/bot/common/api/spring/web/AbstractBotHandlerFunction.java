@@ -1,13 +1,13 @@
-package ru.tinkoff.edu.java.bot.common.spring.web;
+package ru.tinkoff.edu.java.bot.common.api.spring.web;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.function.HandlerFunction;
 import org.springframework.web.servlet.function.ServerRequest;
 import org.springframework.web.servlet.function.ServerResponse;
-import ru.tinkoff.edu.java.bot.common.errors.ApiErrorResponse;
-import ru.tinkoff.edu.java.bot.common.errors.ErrorType;
-import ru.tinkoff.edu.java.bot.common.errors.ValidationFailedException;
+import ru.tinkoff.edu.java.bot.common.api.errors.ApiErrorResponse;
+import ru.tinkoff.edu.java.bot.common.api.errors.ErrorType;
+import ru.tinkoff.edu.java.bot.common.api.errors.ValidationFailedException;
 
 import java.util.Arrays;
 import java.util.UUID;

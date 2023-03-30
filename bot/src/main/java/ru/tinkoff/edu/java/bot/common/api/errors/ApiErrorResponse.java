@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.bot.common.errors;
+package ru.tinkoff.edu.java.bot.common.api.errors;
 
 import java.util.List;
 
