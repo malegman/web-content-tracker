@@ -6,4 +6,4 @@ springdoc:
 spring:
   config:
     import:
-      - file:///${user.home}/.config/web-content-tracker/application.yaml
+      - file:///${user.home}/.config/web-content-tracker/scrapper/application.yaml
