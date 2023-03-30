@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import ru.tinkoff.edu.java.bot.application.shared.application.spi.SendUpdatesSpi;
 
 @Configuration
-public class SharedLinksBeans {
+public class SharedClientBeans {
 
     @Bean
     public SendUpdatesSpi sendUpdatesSpi() {

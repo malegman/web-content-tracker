@@ -19,7 +19,7 @@ import ru.tinkoff.edu.java.bot.common.api.errors.ApiErrorResponse;
 import static org.springframework.web.servlet.function.RouterFunctions.route;
 
 @Configuration
-public class BotLinksBeans {
+public class BotClientBeans {
 
     @Bean
     @RouterOperation(operation = @Operation(
