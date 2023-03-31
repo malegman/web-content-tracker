@@ -21,7 +21,7 @@ public interface CommandHandlerFactory extends Function<CommandHandlerManager, C
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     class Builder {
 
-        protected final Queue<HandlerFunction> handlerFunctionQueue = new PriorityQueue<>();
+        protected final Queue<CommandInnerHandler> commandInnerHandlerQueue = new PriorityQueue<>();
         protected String command;
 
         public Builder command(String value) {
@@ -29,8 +29,8 @@ public interface CommandHandlerFactory extends Function<CommandHandlerManager, C
             return this;
         }
 
-        public Builder addHandlerFunction(final HandlerFunction handlerFunction) {
-            this.handlerFunctionQueue.add(handlerFunction);
+        public Builder addHandlerFunction(final CommandInnerHandler commandInnerHandler) {
+            this.commandInnerHandlerQueue.add(commandInnerHandler);
             return this;
         }
 
