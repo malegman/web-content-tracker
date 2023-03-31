@@ -5,9 +5,9 @@ package ru.tinkoff.edu.java.linkparser.common;
  *
  * @param <T> тип обработки результата работы парсера
  */
-public abstract class UrlParser<T> {
+public abstract class LinkParser<T> {
 
-    private UrlParser<T> next;
+    private LinkParser<T> next;
 
     /**
      * Формирует цепочку парсеров
@@ -20,11 +20,11 @@ public abstract class UrlParser<T> {
      * @param <T> тип обработки результата работы парсера
      */
     @SafeVarargs
-    public static <T> UrlParser<T> link(UrlParser<T> first, UrlParser<T>... chain) {
+    public static <T> LinkParser<T> link(LinkParser<T> first, LinkParser<T>... chain) {
 
-        UrlParser<T> head = first;
+        LinkParser<T> head = first;
 
-        for (UrlParser<T> nextInChain : chain) {
+        for (LinkParser<T> nextInChain : chain) {
             head.next = nextInChain;
             head = nextInChain;
         }
@@ -35,26 +35,26 @@ public abstract class UrlParser<T> {
     /**
      * Метод для разбора ссылки, реализуемый определенными парсерами
      *
-     * @param url ссылка, которую необходимо разобрать
+     * @param link ссылка, которую необходимо разобрать
      *
      * @return результат разбора ссылки
      */
-    protected abstract Result<T> parse(String url);
+    protected abstract Result<T> parse(String link);
 
     /**
      * Метод, вызываемый при разборе строки, для вызова следующего по цепочке парсера
      *
-     * @param url ссылка, которую необходимо разобрать
+     * @param link ссылка, которую необходимо разобрать
      *
      * @return результат разбора ссылки
      */
-    protected Result<T> parseNext(final String url) {
+    protected Result<T> parseNext(final String link) {
 
         if (this.next == null) {
             return Result.failed();
         }
 
-        return this.next.parse(url);
+        return this.next.parse(link);
     }
 
     /**

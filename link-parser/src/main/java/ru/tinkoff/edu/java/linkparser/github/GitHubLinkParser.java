@@ -1,29 +1,29 @@
 package ru.tinkoff.edu.java.linkparser.github;
 
-import ru.tinkoff.edu.java.linkparser.common.UrlParser;
+import ru.tinkoff.edu.java.linkparser.common.LinkParser;
 import ru.tinkoff.edu.java.linkparser.github.payload.GitHubPayload;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
- * Парсер ссылок ресурса github.com, реализация {@link UrlParser}
+ * Парсер ссылок ресурса github.com, реализация {@link LinkParser}
  */
-public final class GitHubUrlParser<T> extends UrlParser<T> {
+public final class GitHubLinkParser<T> extends LinkParser<T> {
 
     public static final Pattern PATTERN_GITHUB_COM_USER_REPO =
             Pattern.compile("^https://([^.]+(?<!github)[.])?github[.]com/(?<user>[^/]+)/(?<repo>[^/]+)");
 
     private final Result.Processor<T> resultProcessor;
 
-    public GitHubUrlParser(final Result.Processor<T> resultProcessor) {
+    public GitHubLinkParser(final Result.Processor<T> resultProcessor) {
         this.resultProcessor = Objects.requireNonNull(resultProcessor);
     }
 
     @Override
-    public UrlParser.Result<T> parse(final String url) {
+    public LinkParser.Result<T> parse(final String link) {
 
-        final var matcher = PATTERN_GITHUB_COM_USER_REPO.matcher(url);
+        final var matcher = PATTERN_GITHUB_COM_USER_REPO.matcher(link);
 
         if (matcher.find()) {
             final var user = matcher.group("user");
@@ -32,10 +32,10 @@ public final class GitHubUrlParser<T> extends UrlParser<T> {
             return Result.success(new GitHubPayload(user, repo), this.resultProcessor);
         }
 
-        return this.parseNext(url);
+        return this.parseNext(link);
     }
 
-    public sealed interface Result<T> extends UrlParser.Result<T> {
+    public sealed interface Result<T> extends LinkParser.Result<T> {
 
         record Success<T>(GitHubPayload payload, Processor<T> processor) implements Result<T> {
 

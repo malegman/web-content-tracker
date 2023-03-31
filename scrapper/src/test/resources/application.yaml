@@ -1,0 +1,9 @@
+app:
+  test: "scrapper_test"
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
+spring:
+  config:
+    import:
+      - file:///${user.home}/.config/web-content-tracker/application.yaml

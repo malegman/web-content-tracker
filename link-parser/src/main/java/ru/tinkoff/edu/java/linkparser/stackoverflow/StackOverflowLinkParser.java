@@ -1,6 +1,6 @@
 package ru.tinkoff.edu.java.linkparser.stackoverflow;
 
-import ru.tinkoff.edu.java.linkparser.common.UrlParser;
+import ru.tinkoff.edu.java.linkparser.common.LinkParser;
 import ru.tinkoff.edu.java.linkparser.stackoverflow.domain.id.QuestionId;
 import ru.tinkoff.edu.java.linkparser.stackoverflow.payload.StackOverflowPayload;
 
@@ -8,23 +8,23 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
- * Парсер ссылок ресурса stackoverflow.com, реализация {@link UrlParser}
+ * Парсер ссылок ресурса stackoverflow.com, реализация {@link LinkParser}
  */
-public final class StackOverflowUrlParser<T> extends UrlParser<T> {
+public final class StackOverflowLinkParser<T> extends LinkParser<T> {
 
     public static final Pattern PATTERN_STACKOVERFLOW_QUESTION_ID =
             Pattern.compile("^https://stackoverflow[.]com/questions/(?<questionId>\\d+)");
 
     private final Result.Processor<T> resultProcessor;
 
-    public StackOverflowUrlParser(final Result.Processor<T> resultProcessor) {
+    public StackOverflowLinkParser(final Result.Processor<T> resultProcessor) {
         this.resultProcessor = Objects.requireNonNull(resultProcessor);
     }
 
     @Override
-    public UrlParser.Result<T> parse(final String url) {
+    public LinkParser.Result<T> parse(final String link) {
 
-        final var matcher = PATTERN_STACKOVERFLOW_QUESTION_ID.matcher(url);
+        final var matcher = PATTERN_STACKOVERFLOW_QUESTION_ID.matcher(link);
 
         if (matcher.find()) {
             final var questionId = Long.parseLong(matcher.group("questionId"));
@@ -32,10 +32,10 @@ public final class StackOverflowUrlParser<T> extends UrlParser<T> {
             return Result.success(new StackOverflowPayload(new QuestionId(questionId)), this.resultProcessor);
         }
 
-        return this.parseNext(url);
+        return this.parseNext(link);
     }
 
-    public sealed interface Result<T> extends UrlParser.Result<T> {
+    public sealed interface Result<T> extends LinkParser.Result<T> {
 
         record Success<T>(StackOverflowPayload payload, Processor<T> processor) implements Result<T> {
 
