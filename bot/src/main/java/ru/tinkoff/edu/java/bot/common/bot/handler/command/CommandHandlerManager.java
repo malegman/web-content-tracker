@@ -1,6 +1,9 @@
-package ru.tinkoff.edu.java.bot.common.telegram.bot;
+package ru.tinkoff.edu.java.bot.common.bot.handler.command;
 
 import ru.tinkoff.edu.java.bot.application.shared.domain.id.TgChatId;
+import ru.tinkoff.edu.java.bot.common.bot.handler.ExitHandlerFunction;
+import ru.tinkoff.edu.java.bot.common.bot.handler.HandlerFunction;
+import ru.tinkoff.edu.java.bot.common.bot.handler.UnknownCommandHandlerFunction;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +20,11 @@ public final class CommandHandlerManager {
     }
 
     public HandlerFunction getHandler(TgChatId tgChatId, String command) {
+
+        if (command.equals("/exit")) {
+            this.tgChatCommandHandlers.remove(tgChatId);
+            return new ExitHandlerFunction(this.tgChatCommandHandlers.containsKey(tgChatId));
+        }
 
         if (!this.tgChatCommandHandlers.containsKey(tgChatId) && !this.commandHandlerFactories.containsKey(command)) {
             return new UnknownCommandHandlerFunction();

@@ -11,9 +11,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.tinkoff.edu.java.bot.application.shared.domain.id.TgChatId;
-import ru.tinkoff.edu.java.bot.common.telegram.bot.CommandHandler;
-import ru.tinkoff.edu.java.bot.common.telegram.bot.CommandHandlerFactory;
-import ru.tinkoff.edu.java.bot.common.telegram.bot.CommandHandlerManager;
+import ru.tinkoff.edu.java.bot.common.bot.handler.command.CommandHandler;
+import ru.tinkoff.edu.java.bot.common.bot.handler.command.CommandHandlerFactory;
+import ru.tinkoff.edu.java.bot.common.bot.handler.command.CommandHandlerManager;
 
 import java.io.IOException;
 import java.util.function.Function;
@@ -44,11 +44,15 @@ public class BotConfiguration {
 
         bot.setUpdatesListener(updates -> {
             updates.forEach(update -> {
-                final var message = update.message();
-                final var tgChatId = TgChatId.valueOf(message.chat().id());
-                final var handler = commandHandlerManager.getHandler(tgChatId, message.text());
-
                 try {
+                    final var callbackQuery = update.callbackQuery();
+                    final var message = callbackQuery != null ? callbackQuery.message() : update.message();
+                    final var tgChatId = TgChatId.valueOf(message.chat().id());
+
+                    final var handler = commandHandlerManager.getHandler(
+                            tgChatId,
+                            callbackQuery != null ? callbackQuery.data() : message.text());
+
                     bot.execute(handler.handle(tgChatId, message), new Callback<SendMessage, SendResponse>() {
                         @Override
                         public void onResponse(SendMessage sendMessage, SendResponse sendResponse) {
@@ -59,7 +63,7 @@ public class BotConfiguration {
                         }
                     });
                 } catch (Exception exception) {
-                    log.error(exception.getMessage());
+                    log.error("Error", exception);
                 }
             });
             return UpdatesListener.CONFIRMED_UPDATES_ALL;

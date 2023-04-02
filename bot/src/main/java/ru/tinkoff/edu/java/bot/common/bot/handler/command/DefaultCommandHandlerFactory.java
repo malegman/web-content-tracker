@@ -1,17 +1,17 @@
-package ru.tinkoff.edu.java.bot.common.telegram.bot;
+package ru.tinkoff.edu.java.bot.common.bot.handler.command;
 
 import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-class DefaultCommandHandlerFactory implements CommandHandlerFactory {
+final class DefaultCommandHandlerFactory implements CommandHandlerFactory {
 
     private final String command;
-    private final Queue<HandlerFunction> handlerFunctionQueue;
+    private final Queue<CommandInnerHandler> commandInnerHandlerQueue;
 
     DefaultCommandHandlerFactory(final Builder builder) {
         this.command = Objects.requireNonNull(builder.command);
-        this.handlerFunctionQueue = Objects.requireNonNull(builder.handlerFunctionQueue);
+        this.commandInnerHandlerQueue = Objects.requireNonNull(builder.commandInnerHandlerQueue);
     }
 
     @Override
@@ -21,6 +21,6 @@ class DefaultCommandHandlerFactory implements CommandHandlerFactory {
 
     @Override
     public CommandHandler apply(final CommandHandlerManager commandHandlerManager) {
-        return new CommandHandler(commandHandlerManager, new PriorityQueue<>(this.handlerFunctionQueue));
+        return new CommandHandler(commandHandlerManager, new PriorityQueue<>(this.commandInnerHandlerQueue));
     }
 }

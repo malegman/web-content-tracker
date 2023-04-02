@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.bot.common.telegram.bot;
+package ru.tinkoff.edu.java.bot.common.bot.handler.command;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
