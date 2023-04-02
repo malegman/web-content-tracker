@@ -29,14 +29,9 @@ public class DeleteLinkHandlerFunctionIT {
     void deleteLink_RequestIsValid_ReturnsResponseWithStatusOk() throws Exception {
 
         final var requestBuilder = delete("/links")
+                .param("link", "url")
                 .header("Tg-Chat-Id", "1")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                        {
-                            "link": "url"
-                        }
-                        """);
+                .accept(MediaType.APPLICATION_JSON);
 
         this.mockMvc.perform(requestBuilder)
                 .andExpect(status().isOk())
@@ -50,13 +45,8 @@ public class DeleteLinkHandlerFunctionIT {
     void deleteLink_RequestIsInvalid_ReturnsResponseWithStatusBadRequest() throws Exception {
 
         final var requestBuilder = delete("/links")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                        {
-                            "link": " "
-                        }
-                        """);
+                .param("link", " ")
+                .accept(MediaType.APPLICATION_JSON);
 
         final var matcher = new ApiErrorResponseAssertionMatcher(this.objectMapper);
 
@@ -77,14 +67,9 @@ public class DeleteLinkHandlerFunctionIT {
     void deleteLink_IncorrectInput_ReturnsResponseWithStatusBadRequest() throws Exception {
 
         final var requestBuilder = delete("/links")
+                .param("link", "url")
                 .header("Tg-Chat-Id", "id")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                        {
-                            "link": "url"
-                        }
-                        """);
+                .accept(MediaType.APPLICATION_JSON);
 
         final var matcher = new ApiErrorResponseAssertionMatcher(this.objectMapper);
 

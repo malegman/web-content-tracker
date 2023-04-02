@@ -7,11 +7,8 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.servlet.function.ServerRequest;
 import org.springframework.web.servlet.function.ServerResponse;
 import ru.tinkoff.edu.java.scrapper.application.links.api.DeleteLinkApi;
-import ru.tinkoff.edu.java.scrapper.application.links.api.DeleteLinkApi.Result.ExecutionFailed;
-import ru.tinkoff.edu.java.scrapper.application.links.api.DeleteLinkApi.Result.Success;
-import ru.tinkoff.edu.java.scrapper.application.links.api.DeleteLinkApi.Result.ValidationFailed;
-import ru.tinkoff.edu.java.scrapper.application.links.api.DeleteLinkApi.Result.Visitor;
-import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.request.RemoveLinkRequest;
+import ru.tinkoff.edu.java.scrapper.application.links.api.DeleteLinkApi.Payload;
+import ru.tinkoff.edu.java.scrapper.application.links.api.DeleteLinkApi.Result.*;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.response.LinkResponse;
 import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.LinkId;
 import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.TgChatId;
@@ -42,15 +39,14 @@ public final class DeleteLinkHandlerFunction extends AbstractScrapperHandlerFunc
     }
     
     @Override
-    protected ServerResponse handleInternal(ServerRequest request, TransactionStatus status) throws Exception {
+    protected ServerResponse handleInternal(ServerRequest request, TransactionStatus status) {
 
         final var resultMapper = new ResultToServerResponseMapper();
-        final var requestPayload = request.body(RemoveLinkRequest.class);
 
         this.deleteLinkApi.invoke(builder -> builder
                         .tgChatId(this.extractHeader(request, "Tg-Chat-Id")
                                 .map(TgChatId::valueOf).orElse(null))
-                        .link(requestPayload.link()))
+                        .link(request.param(Payload.PROP_LINK).orElse(null)))
                 .onFailed(status::setRollbackOnly)
                 .visit(resultMapper);
 

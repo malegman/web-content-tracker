@@ -136,12 +136,13 @@ paths:
           schema:
             type: integer
             format: int64
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/RemoveLinkRequest"
-        required: true
+        - name: link
+          in: query
+          required: true
+          description: Ссылка для удаления из списка отслеживания
+          schema:
+            type: string
+            format: uri
       responses:
         '200':
           description: Ссылка успешно убрана
@@ -199,10 +200,4 @@ components:
         size:
           type: integer
           format: int32
-    RemoveLinkRequest:
-      type: object
-      properties:
-        link:
-          type: string
-          format: uri
   
