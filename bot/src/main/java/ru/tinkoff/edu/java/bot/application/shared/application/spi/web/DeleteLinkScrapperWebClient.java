@@ -26,11 +26,9 @@ public final class DeleteLinkScrapperWebClient implements DeleteLinkSpi {
     public WebClientBodyResponse<LinkScrapperResponse> deleteLink(TgChatId tgChatId, String link) {
         try {
             return this.scrapperWebClient.delete()
-                    .uri("/links")
+                    .uri("/links?link=" + link)
                     .header(ScrapperHeaders.TG_CHAT_ID, String.valueOf(tgChatId.value()))
                     .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-
                     .retrieve()
                     .onStatus(HttpStatusCode::is5xxServerError, ClientResponse::createException)
                     .toEntity(LinkScrapperResponse.class)

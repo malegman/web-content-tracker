@@ -1,6 +1,7 @@
 package ru.tinkoff.edu.java.bot.application.bot.handler.inner;
 
 import com.pengrad.telegrambot.model.Message;
+import org.springframework.http.HttpStatus;
 import ru.tinkoff.edu.java.bot.application.shared.application.spi.DeleteLinkSpi;
 import ru.tinkoff.edu.java.bot.application.shared.domain.id.TgChatId;
 import ru.tinkoff.edu.java.bot.common.bot.handler.command.CommandInnerHandler;
@@ -17,6 +18,15 @@ public final class UnTrackDataCommandInnerHandler implements CommandInnerHandler
 
     @Override
     public Result innerHandle(TgChatId tgChatId, Message message) {
-        return null;
+        return deleteLinkSpi.deleteLink(tgChatId, message.text())
+                .setResultOn2xxSuccessful(Result.sendMessage(tgChatId, "Ссылка успешно удалена!").success())
+                .mapResultOn4xxClientError(status -> {
+                    if (status.equals(HttpStatus.NOT_FOUND)) {
+                        return Result.sendMessage(tgChatId, "Эта ссылка не отслеживается.").abort();
+                    } else {
+                        return Result.sendMessage(tgChatId, "Проверьте ссылку и напишите ещё раз.").repeat();
+                    }})
+                .setResultOnException(Result.sendMessage(tgChatId, "Попробуйте повторить позже.").abort())
+                .getResult();
     }
 }
