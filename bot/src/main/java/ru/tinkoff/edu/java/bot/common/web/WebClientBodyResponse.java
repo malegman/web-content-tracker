@@ -3,6 +3,7 @@ package ru.tinkoff.edu.java.bot.common.web;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.reactive.function.client.WebClientException;
 import ru.tinkoff.edu.java.bot.common.bot.handler.command.CommandInnerHandler.Result;
 
 import java.util.Objects;
@@ -50,8 +51,15 @@ public final class WebClientBodyResponse<B> {
     }
 
     public WebClientBodyResponse<B> setResultOn2xxSuccessful(Result result) {
-        if (Objects.isNull(this.body) && Objects.isNull(this.result) && this.httpStatusCode.is2xxSuccessful()) {
+        if (Objects.nonNull(this.body) && Objects.isNull(this.result) && this.httpStatusCode.is2xxSuccessful()) {
             this.result = result;
+        }
+        return this;
+    }
+
+    public WebClientBodyResponse<B> mapResultOn4xxClientError(Function<HttpStatusCode, Result> mapper) {
+        if (Objects.isNull(this.body) && Objects.isNull(this.result) && this.httpStatusCode.is4xxClientError()) {
+            this.result = mapper.apply(this.httpStatusCode);
         }
         return this;
     }
@@ -59,6 +67,13 @@ public final class WebClientBodyResponse<B> {
     public WebClientBodyResponse<B> setResultOn4xxClientError(Result result) {
         if (Objects.isNull(this.result) && this.httpStatusCode.is4xxClientError()) {
             this.result = result;
+        }
+        return this;
+    }
+
+    public WebClientBodyResponse<B> mapResultOnWebClientException(Function<WebClientException, Result> mapper) {
+        if (Objects.isNull(this.result) && this.isException && this.exception instanceof WebClientException wce) {
+            this.result = mapper.apply(wce);
         }
         return this;
     }

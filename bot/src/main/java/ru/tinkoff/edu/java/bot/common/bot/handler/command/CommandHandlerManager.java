@@ -22,15 +22,16 @@ public final class CommandHandlerManager {
     public HandlerFunction getHandler(TgChatId tgChatId, String command) {
 
         if (command.equals("/exit")) {
-            this.tgChatCommandHandlers.remove(tgChatId);
-            return new ExitHandlerFunction(this.tgChatCommandHandlers.containsKey(tgChatId));
+            return new ExitHandlerFunction(Objects.nonNull(this.tgChatCommandHandlers.remove(tgChatId)));
         }
 
         if (!this.tgChatCommandHandlers.containsKey(tgChatId) && !this.commandHandlerFactories.containsKey(command)) {
             return new UnknownCommandHandlerFunction();
         }
 
-        this.tgChatCommandHandlers.putIfAbsent(tgChatId, this.commandHandlerFactories.get(command).apply(this));
+        if (!this.tgChatCommandHandlers.containsKey(tgChatId)) {
+            this.tgChatCommandHandlers.put(tgChatId, this.commandHandlerFactories.get(command).apply(this));
+        }
 
         return this.tgChatCommandHandlers.get(tgChatId);
     }

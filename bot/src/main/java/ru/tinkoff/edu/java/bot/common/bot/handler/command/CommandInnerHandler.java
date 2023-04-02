@@ -9,12 +9,12 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 @FunctionalInterface
-public interface CommandInnerHandler extends Comparable<HandlerFunction> {
+public interface CommandInnerHandler extends Comparable<CommandInnerHandler> {
 
     Result innerHandle(TgChatId tgChatId, Message message);
 
     @Override
-    default int compareTo(HandlerFunction o) {
+    default int compareTo(CommandInnerHandler o) {
         return 0;
     }
 
