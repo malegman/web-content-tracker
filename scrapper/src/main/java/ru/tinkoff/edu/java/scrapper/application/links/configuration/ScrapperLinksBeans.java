@@ -109,7 +109,7 @@ public class ScrapperLinksBeans {
                                     schema = @Schema(implementation = ApiErrorResponse.class))),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "Чат не существует")}))
+                            description = "Чат или ссылка не существует")}))
     public RouterFunction<ServerResponse> addLinkRouterFunction(
             final BeanFactory beanFactory,
             final AddLinkSpi addLinkSpi) {
@@ -158,7 +158,10 @@ public class ScrapperLinksBeans {
                                     schema = @Schema(implementation = ApiErrorResponse.class))),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "Чат не существует")}))
+                            description = "Чат не существует"),
+                    @ApiResponse(
+                            responseCode = "409",
+                            description = "Ссылка уже отслеживается")}))
     public RouterFunction<ServerResponse> deleteLinkRouterFunction(
             final BeanFactory beanFactory,
             final DeleteLinkSpi deleteLinkSpi) {
