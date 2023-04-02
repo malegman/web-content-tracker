@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.bot.application.bot.dto;
+package ru.tinkoff.edu.java.bot.application.shared.application.dto.response;
 
 import java.net.URI;
 

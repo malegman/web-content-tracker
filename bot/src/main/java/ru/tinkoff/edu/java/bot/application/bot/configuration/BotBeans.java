@@ -6,6 +6,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import ru.tinkoff.edu.java.bot.application.bot.handler.inner.HelpCommandInnerHandler;
 import ru.tinkoff.edu.java.bot.application.bot.handler.inner.ListCommandInnerHandler;
 import ru.tinkoff.edu.java.bot.application.bot.handler.inner.StartCommandInnerHandler;
+import ru.tinkoff.edu.java.bot.application.shared.application.spi.web.AddChatScrapperWebClient;
+import ru.tinkoff.edu.java.bot.application.shared.application.spi.web.FindListLinksScrapperWebClient;
 import ru.tinkoff.edu.java.bot.common.bot.handler.command.CommandHandlerFactory;
 
 @Configuration
@@ -16,7 +18,8 @@ public class BotBeans {
 
         return CommandHandlerFactory.builder()
                 .command("/start")
-                .addHandlerFunction(new StartCommandInnerHandler(scrapperWebClient))
+                .addHandlerFunction(new StartCommandInnerHandler(
+                        new AddChatScrapperWebClient(scrapperWebClient)))
                 .build();
     }
 
@@ -34,7 +37,8 @@ public class BotBeans {
 
         return CommandHandlerFactory.builder()
                 .command("/list")
-                .addHandlerFunction(new ListCommandInnerHandler(scrapperWebClient))
+                .addHandlerFunction(new ListCommandInnerHandler(
+                        new FindListLinksScrapperWebClient(scrapperWebClient)))
                 .build();
     }
 }
