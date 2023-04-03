@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import ru.tinkoff.edu.java.bot.application.shared.application.dto.response.LinkScrapperResponse;
 import ru.tinkoff.edu.java.bot.application.shared.application.spi.DeleteLinkSpi;
 import ru.tinkoff.edu.java.bot.application.shared.domain.id.TgChatId;
@@ -13,6 +14,7 @@ import ru.tinkoff.edu.java.bot.common.web.ScrapperHeaders;
 import ru.tinkoff.edu.java.bot.common.web.WebClientBodyResponse;
 
 import java.util.Objects;
+import java.util.concurrent.CompletionException;
 
 /**
  * Реализация {@link DeleteLinkSpi} с обращением к scrapper через web-client
@@ -34,11 +36,13 @@ public final class DeleteLinkScrapperWebClient implements DeleteLinkSpi {
                     .header(ScrapperHeaders.TG_CHAT_ID, String.valueOf(tgChatId.value()))
                     .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                     .retrieve()
-                    .onStatus(HttpStatusCode::is5xxServerError, ClientResponse::createException)
+                    .onStatus(HttpStatusCode::is4xxClientError, ClientResponse::createException)
                     .toEntity(LinkScrapperResponse.class)
                     .toFuture()
                     .thenApply(WebClientBodyResponse::withBody)
                     .join();
+        } catch (CompletionException e) {
+            return WebClientBodyResponse.fromWebClientResponseException((WebClientResponseException) e.getCause());
         } catch (Exception e) {
             log.error("Exception", e);
             return WebClientBodyResponse.fromException(e);
