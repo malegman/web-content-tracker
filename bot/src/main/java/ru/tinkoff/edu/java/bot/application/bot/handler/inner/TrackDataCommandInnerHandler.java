@@ -25,7 +25,7 @@ public final class TrackDataCommandInnerHandler implements CommandInnerHandler {
                     if (status.equals(HttpStatus.CONFLICT)) {
                         return Result.sendMessage(tgChatId, "Эта ссылка уже отслеживается.").abort();
                     } else {
-                        return Result.sendMessage(tgChatId, "Проверьте ссылку и напишите ещё раз.").repeat();
+                        return Result.sendMessage(tgChatId, "Проверьте корректность ссылки и введите ссылку ещё раз.").repeat();
                     }})
                 .setResultOnException(Result.sendMessage(tgChatId, "Попробуйте повторить позже.").abort())
                 .getResult();
