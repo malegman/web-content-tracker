@@ -1,17 +1,15 @@
 package ru.tinkoff.edu.java.bot.common.bot.handler.command;
 
-import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.request.SendMessage;
 import ru.tinkoff.edu.java.bot.application.shared.domain.id.TgChatId;
-import ru.tinkoff.edu.java.bot.common.bot.handler.HandlerFunction;
+import ru.tinkoff.edu.java.bot.common.bot.BotRequest;
 
-import java.util.Objects;
 import java.util.function.Consumer;
 
 @FunctionalInterface
 public interface CommandInnerHandler extends Comparable<CommandInnerHandler> {
 
-    Result innerHandle(TgChatId tgChatId, Message message);
+    Result innerHandle(BotRequest botRequest);
 
     @Override
     default int compareTo(CommandInnerHandler o) {

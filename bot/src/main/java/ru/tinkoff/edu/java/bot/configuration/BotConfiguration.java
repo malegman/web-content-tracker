@@ -11,6 +11,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.tinkoff.edu.java.bot.application.shared.domain.id.TgChatId;
+import ru.tinkoff.edu.java.bot.common.bot.BotUtils;
 import ru.tinkoff.edu.java.bot.common.bot.handler.command.CommandHandler;
 import ru.tinkoff.edu.java.bot.common.bot.handler.command.CommandHandlerFactory;
 import ru.tinkoff.edu.java.bot.common.bot.handler.command.CommandHandlerManager;
@@ -45,15 +46,11 @@ public class BotConfiguration {
         bot.setUpdatesListener(updates -> {
             updates.forEach(update -> {
                 try {
-                    final var callbackQuery = update.callbackQuery();
-                    final var message = callbackQuery != null ? callbackQuery.message() : update.message();
-                    final var tgChatId = TgChatId.valueOf(message.chat().id());
-
+                    final var botRequest = BotUtils.requestFromUpdate(update);
                     final var handler = commandHandlerManager.getHandler(
-                            tgChatId,
-                            callbackQuery != null ? callbackQuery.data() : message.text());
+                            botRequest.tgChatId(), botRequest.messageText());
 
-                    bot.execute(handler.handle(tgChatId, message), new Callback<SendMessage, SendResponse>() {
+                    bot.execute(handler.handle(botRequest), new Callback<SendMessage, SendResponse>() {
                         @Override
                         public void onResponse(SendMessage sendMessage, SendResponse sendResponse) {
                         }

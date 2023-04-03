@@ -1,8 +1,7 @@
 package ru.tinkoff.edu.java.bot.application.bot.handler.inner;
 
-import com.pengrad.telegrambot.model.Message;
 import ru.tinkoff.edu.java.bot.application.shared.application.spi.AddChatSpi;
-import ru.tinkoff.edu.java.bot.application.shared.domain.id.TgChatId;
+import ru.tinkoff.edu.java.bot.common.bot.BotRequest;
 import ru.tinkoff.edu.java.bot.common.bot.handler.command.CommandInnerHandler;
 
 import java.util.Objects;
@@ -16,8 +15,9 @@ public final class StartCommandInnerHandler implements CommandInnerHandler {
     }
 
     @Override
-    public Result innerHandle(final TgChatId tgChatId, final Message message) {
+    public Result innerHandle(BotRequest botRequest) {
 
+        final var tgChatId = botRequest.tgChatId();
         return this.addChatSpi.addChat(tgChatId)
                 .setResultOn2xxSuccessful(Result.sendMessage(tgChatId, "Привет!").success())
                 .setResultOn4xxClientError(Result.sendMessage(tgChatId, "Я уже Вас знаю!").abort())

@@ -1,10 +1,9 @@
 package ru.tinkoff.edu.java.bot.application.bot.handler.inner;
 
-import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import ru.tinkoff.edu.java.bot.application.shared.application.spi.FindListLinkSpi;
-import ru.tinkoff.edu.java.bot.application.shared.domain.id.TgChatId;
+import ru.tinkoff.edu.java.bot.common.bot.BotRequest;
 import ru.tinkoff.edu.java.bot.common.bot.handler.command.CommandInnerHandler;
 
 import java.util.Objects;
@@ -18,8 +17,9 @@ public final class ListCommandInnerHandler implements CommandInnerHandler {
     }
 
     @Override
-    public Result innerHandle(TgChatId tgChatId, Message message) {
+    public Result innerHandle(BotRequest botRequest) {
 
+        final var tgChatId = botRequest.tgChatId();
         return this.findListLinkSpi.findLinks(tgChatId)
                 .mapResultOn2xxSuccessful(listLinks ->
                         (listLinks == null || listLinks.size() == 0)
