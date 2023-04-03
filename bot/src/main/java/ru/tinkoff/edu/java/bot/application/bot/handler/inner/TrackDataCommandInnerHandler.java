@@ -33,7 +33,7 @@ public final class TrackDataCommandInnerHandler implements CommandInnerHandler {
                                 Проверьте корректность ссылки и введите ссылку ещё раз.
                                 Отправьте /exit, чтобы прервать команду.""").repeat();
                     }})
-                .setResultOnException(Result.sendMessage(tgChatId, "Попробуйте повторить позже.").abort())
+                .setResultOnException(Result.sendMessage(tgChatId, "Что-то пошло не так, повторите позже.").abort())
                 .getResult();
     }
 }
