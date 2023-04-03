@@ -56,11 +56,11 @@ public class BotConfiguration {
 
                         @Override
                         public void onFailure(SendMessage sendMessage, IOException e) {
-                            log.error("Exception", e);
+                            log.warn("Warning. Update: " + update, e);
                         }
                     });
                 } catch (Exception exception) {
-                    log.error("Exception", exception);
+                    log.error("Exception. Update: " + update, exception);
                 }
             });
             return UpdatesListener.CONFIRMED_UPDATES_ALL;
