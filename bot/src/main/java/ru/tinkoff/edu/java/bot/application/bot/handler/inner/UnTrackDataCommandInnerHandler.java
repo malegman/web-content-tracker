@@ -25,7 +25,9 @@ public final class UnTrackDataCommandInnerHandler implements CommandInnerHandler
                     if (status.equals(HttpStatus.NOT_FOUND)) {
                         return Result.sendMessage(tgChatId, "Эта ссылка не отслеживается.").abort();
                     } else {
-                        return Result.sendMessage(tgChatId, "Проверьте ссылку и напишите ещё раз.").repeat();
+                        return Result.sendMessage(tgChatId, """
+                                Проверьте корректность ссылки и введите ссылку ещё раз.
+                                Отправьте /exit, чтобы прервать команду.""").repeat();
                     }})
                 .setResultOnException(Result.sendMessage(tgChatId, "Попробуйте повторить позже.").abort())
                 .getResult();

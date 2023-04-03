@@ -15,8 +15,7 @@ public final class HelpCommandInnerHandler implements CommandInnerHandler {
                         .addRow(new InlineKeyboardButton("Показать список команд").callbackData("/help"))
                         .addRow(new InlineKeyboardButton("Отслеживать новую ссылку").callbackData("/track"))
                         .addRow(new InlineKeyboardButton("Удалить ссылку из отслеживания").callbackData("/untrack"))
-                        .addRow(new InlineKeyboardButton("Показать список отслеживаемых ссылок").callbackData("/list"))
-                        .addRow(new InlineKeyboardButton("Прервать команду").callbackData("/exit"))))
+                        .addRow(new InlineKeyboardButton("Показать список отслеживаемых ссылок").callbackData("/list"))))
                 .success();
     }
 }
