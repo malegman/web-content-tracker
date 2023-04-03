@@ -6,6 +6,8 @@ import lombok.Getter;
 public enum ErrorType {
 
     VALIDATION_FAILED("error.validation_failed.description", "VALIDATION_FAILED"),
+
+    ILLEGAL_ARGUMENTS("error.illegal_arguments.description", "ILLEGAL_ARGUMENTS"),
     EXECUTION_FAILED("error.execution_failed.description", "EXECUTION_FAILED");
 
     private final String description;

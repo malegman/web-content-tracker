@@ -15,6 +15,7 @@ import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.request.A
 import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.response.LinkResponse;
 import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.TgChatId;
 
+import java.net.URI;
 import java.util.Objects;
 
 /**
@@ -47,7 +48,7 @@ public final class AddLinkHandlerFunction extends AbstractScrapperHandlerFunctio
         this.addLinkApi.invoke(builder -> builder
                     .tgChatId(this.extractHeader(request, "Tg-Chat-Id")
                             .map(TgChatId::valueOf).orElse(null))
-                    .link(requestPayload.link()))
+                    .link(URI.create(requestPayload.link()).toString()))
                 .onFailed(status::setRollbackOnly)
                 .visit(resultMapper);
 

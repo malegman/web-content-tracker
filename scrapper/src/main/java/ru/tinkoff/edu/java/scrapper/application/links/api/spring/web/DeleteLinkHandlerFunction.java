@@ -15,6 +15,7 @@ import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.TgChatId;
 import ru.tinkoff.edu.java.scrapper.common.errors.ValidationFailedException;
 import ru.tinkoff.edu.java.scrapper.common.spring.web.AbstractScrapperHandlerFunction;
 
+import java.net.URI;
 import java.util.Objects;
 
 /**
@@ -46,7 +47,7 @@ public final class DeleteLinkHandlerFunction extends AbstractScrapperHandlerFunc
         this.deleteLinkApi.invoke(builder -> builder
                         .tgChatId(this.extractHeader(request, "Tg-Chat-Id")
                                 .map(TgChatId::valueOf).orElse(null))
-                        .link(request.param(Payload.PROP_LINK).orElse(null)))
+                        .link(URI.create(request.param(Payload.PROP_LINK).orElse("")).toString()))
                 .onFailed(status::setRollbackOnly)
                 .visit(resultMapper);
 
