@@ -22,8 +22,8 @@ public final class WebClientBodyResponse<B> {
     private Result result;
     private boolean isException;
 
-    private WebClientBodyResponse(final HttpStatusCode httpStatusCode,
-                                  final B body) {
+    public WebClientBodyResponse(final HttpStatusCode httpStatusCode,
+                                 final B body) {
         this.httpStatusCode = Objects.requireNonNull(httpStatusCode);
         this.body = body;
     }
