@@ -44,6 +44,18 @@ public interface CommandInnerHandler extends Comparable<CommandInnerHandler> {
             ABORT
         }
 
+        public boolean isSuccess() {
+            return this.resultType.equals(ResultType.SUCCESS);
+        }
+
+        public boolean isAbort() {
+            return this.resultType.equals(ResultType.ABORT);
+        }
+
+        public boolean isRepeat() {
+            return this.resultType.equals(ResultType.REPEAT);
+        }
+
         public static final class Builder {
 
             private final SendMessage sendMessage;
