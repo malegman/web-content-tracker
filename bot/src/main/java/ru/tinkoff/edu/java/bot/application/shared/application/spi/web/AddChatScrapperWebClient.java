@@ -10,7 +10,6 @@ import ru.tinkoff.edu.java.bot.application.shared.domain.id.TgChatId;
 import ru.tinkoff.edu.java.bot.common.web.WebClientBodyResponse;
 
 import java.util.Objects;
-import java.util.concurrent.CompletionException;
 
 /**
  * Реализация {@link AddChatSpi} с обращением к scrapper через web-client

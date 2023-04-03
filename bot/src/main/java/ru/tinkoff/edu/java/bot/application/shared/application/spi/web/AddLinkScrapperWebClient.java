@@ -16,7 +16,6 @@ import ru.tinkoff.edu.java.bot.common.web.ScrapperHeaders;
 import ru.tinkoff.edu.java.bot.common.web.WebClientBodyResponse;
 
 import java.util.Objects;
-import java.util.concurrent.CompletionException;
 
 /**
  * Реализация {@link AddLinkSpi} с обращением к scrapper через web-client
