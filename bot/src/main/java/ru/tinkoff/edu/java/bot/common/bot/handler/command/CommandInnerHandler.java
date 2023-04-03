@@ -6,9 +6,19 @@ import ru.tinkoff.edu.java.bot.common.bot.BotRequest;
 
 import java.util.function.Consumer;
 
+/**
+ * Интерфейс внутреннего обработчика команды
+ */
 @FunctionalInterface
 public interface CommandInnerHandler extends Comparable<CommandInnerHandler> {
 
+    /**
+     * Обрабатывает запрос бота.
+     *
+     * @param botRequest запрос бота
+     *
+     * @return результат обработки
+     */
     Result innerHandle(BotRequest botRequest);
 
     @Override
@@ -16,6 +26,12 @@ public interface CommandInnerHandler extends Comparable<CommandInnerHandler> {
         return 0;
     }
 
+    /**
+     * Результат обработки сообщения внутри команды
+     *
+     * @param sendMessage сообщение для отправки пользователю
+     * @param resultType  тип результата
+     */
     record Result(SendMessage sendMessage, ResultType resultType) {
 
         public static Builder sendMessage(TgChatId tgChatId, String text) {

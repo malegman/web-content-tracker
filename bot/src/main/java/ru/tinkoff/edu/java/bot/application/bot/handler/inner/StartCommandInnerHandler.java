@@ -7,6 +7,10 @@ import ru.tinkoff.edu.java.bot.common.bot.handler.command.CommandInnerHandler;
 
 import java.util.Objects;
 
+/**
+ * Обработчик сообщения команды бота /start, реализует {@link CommandInnerHandler}.<br>
+ * Обрабатывает добавление чата.
+ */
 public final class StartCommandInnerHandler implements CommandInnerHandler {
 
     private final AddChatSpi addChatSpi;

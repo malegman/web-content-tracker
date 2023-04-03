@@ -14,6 +14,9 @@ import ru.tinkoff.edu.java.bot.common.web.WebClientBodyResponse;
 
 import java.util.Objects;
 
+/**
+ * Реализация {@link DeleteLinkSpi} с обращением к scrapper через web-client
+ */
 @Slf4j
 public final class DeleteLinkScrapperWebClient implements DeleteLinkSpi {
 

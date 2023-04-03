@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.tinkoff.edu.java.bot.application.shared.domain.id.TgChatId;
 import ru.tinkoff.edu.java.bot.common.bot.BotUtils;
 import ru.tinkoff.edu.java.bot.common.bot.handler.command.CommandHandler;
 import ru.tinkoff.edu.java.bot.common.bot.handler.command.CommandHandlerFactory;
@@ -57,10 +56,11 @@ public class BotConfiguration {
 
                         @Override
                         public void onFailure(SendMessage sendMessage, IOException e) {
+                            log.error("Exception", e);
                         }
                     });
                 } catch (Exception exception) {
-                    log.error("Error", exception);
+                    log.error("Exception", exception);
                 }
             });
             return UpdatesListener.CONFIRMED_UPDATES_ALL;

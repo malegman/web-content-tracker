@@ -7,10 +7,20 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.function.Function;
 
+/**
+ * Интерфейс фабрики обработчиков команд бота
+ */
 public interface CommandHandlerFactory extends Function<CommandHandlerManager, CommandHandler> {
 
     String getCommand();
 
+    /**
+     * Создает обработчика команды.
+     *
+     * @param commandHandlerManager менеджер обработчиков команд
+     *
+     * @return обработчик команды
+     */
     @Override
     CommandHandler apply(final CommandHandlerManager commandHandlerManager);
 

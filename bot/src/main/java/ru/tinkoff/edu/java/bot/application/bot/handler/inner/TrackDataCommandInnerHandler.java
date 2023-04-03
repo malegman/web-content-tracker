@@ -7,6 +7,10 @@ import ru.tinkoff.edu.java.bot.common.bot.handler.command.CommandInnerHandler;
 
 import java.util.Objects;
 
+/**
+ * Обработчик сообщения команды бота /track, реализует {@link CommandInnerHandler}.<br>
+ * Обрабатывает добавление ссылки.
+ */
 public final class TrackDataCommandInnerHandler implements CommandInnerHandler {
 
     private final AddLinkSpi addLinkSpi;

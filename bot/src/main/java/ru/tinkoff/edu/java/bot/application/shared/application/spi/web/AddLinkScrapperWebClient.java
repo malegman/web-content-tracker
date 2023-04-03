@@ -18,6 +18,9 @@ import ru.tinkoff.edu.java.bot.common.web.WebClientBodyResponse;
 import java.util.Objects;
 import java.util.concurrent.CompletionException;
 
+/**
+ * Реализация {@link AddLinkSpi} с обращением к scrapper через web-client
+ */
 @Slf4j
 public final class AddLinkScrapperWebClient implements AddLinkSpi {
 

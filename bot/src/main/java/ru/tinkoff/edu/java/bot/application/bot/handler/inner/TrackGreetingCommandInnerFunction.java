@@ -3,6 +3,10 @@ package ru.tinkoff.edu.java.bot.application.bot.handler.inner;
 import ru.tinkoff.edu.java.bot.common.bot.BotRequest;
 import ru.tinkoff.edu.java.bot.common.bot.handler.command.CommandInnerHandler;
 
+/**
+ * Обработчик сообщения команды бота /track, реализует {@link CommandInnerHandler}.<br>
+ * Возвращает сообщения для ввода ссылки.
+ */
 public final class TrackGreetingCommandInnerFunction implements CommandInnerHandler {
 
     @Override

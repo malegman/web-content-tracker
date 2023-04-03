@@ -8,6 +8,10 @@ import ru.tinkoff.edu.java.bot.common.bot.handler.command.CommandInnerHandler;
 
 import java.util.Objects;
 
+/**
+ * Обработчик сообщения команды бота /list, реализует {@link CommandInnerHandler}.<br>
+ * Обрабатывает получение списка отслеживаемых ссылок.
+ */
 public final class ListCommandInnerHandler implements CommandInnerHandler {
 
     private final FindListLinkSpi findListLinkSpi;

@@ -7,6 +7,9 @@ import ru.tinkoff.edu.java.bot.common.bot.handler.HandlerFunction;
 import java.util.Objects;
 import java.util.Queue;
 
+/**
+ * Обработчик команды бота, реализует {@link HandlerFunction}
+ */
 public class CommandHandler implements HandlerFunction {
 
     private final CommandHandlerManager commandHandlerManager;
@@ -18,6 +21,13 @@ public class CommandHandler implements HandlerFunction {
         this.commandInnerHandlerQueue = Objects.requireNonNull(commandInnerHandlerQueue);
     }
 
+    /**
+     * Обрабатывает запрос бота.
+     *
+     * @param botRequest запрос бота
+     *
+     * @return сообщение для отправки пользователю
+     */
     @Override
     public SendMessage handle(BotRequest botRequest) {
         final var result = this.commandInnerHandlerQueue.peek().innerHandle(botRequest);

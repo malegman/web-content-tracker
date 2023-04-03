@@ -10,6 +10,9 @@ import ru.tinkoff.edu.java.bot.common.web.WebClientBodyResponse;
 
 import java.util.Objects;
 
+/**
+ * Реализация {@link AddChatSpi} с обращением к scrapper через web-client
+ */
 @Slf4j
 public final class AddChatScrapperWebClient implements AddChatSpi {
 
