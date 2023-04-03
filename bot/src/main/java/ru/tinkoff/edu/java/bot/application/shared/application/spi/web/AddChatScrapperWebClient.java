@@ -1,5 +1,6 @@
 package ru.tinkoff.edu.java.bot.application.shared.application.spi.web;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -9,6 +10,7 @@ import ru.tinkoff.edu.java.bot.common.web.WebClientBodyResponse;
 
 import java.util.Objects;
 
+@Slf4j
 public final class AddChatScrapperWebClient implements AddChatSpi {
 
     private final WebClient scrapperWebClient;
@@ -28,6 +30,7 @@ public final class AddChatScrapperWebClient implements AddChatSpi {
                     .thenApply(WebClientBodyResponse::bodiless)
                     .join();
         } catch (Exception e) {
+            log.error("Exception", e);
             return WebClientBodyResponse.fromException(e);
         }
     }

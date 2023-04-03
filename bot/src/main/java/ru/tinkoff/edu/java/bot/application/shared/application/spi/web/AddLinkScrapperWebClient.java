@@ -1,5 +1,6 @@
 package ru.tinkoff.edu.java.bot.application.shared.application.spi.web;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -16,6 +17,7 @@ import ru.tinkoff.edu.java.bot.common.web.WebClientBodyResponse;
 import java.net.URI;
 import java.util.Objects;
 
+@Slf4j
 public final class AddLinkScrapperWebClient implements AddLinkSpi {
 
     private final WebClient scrapperWebClient;
@@ -40,6 +42,7 @@ public final class AddLinkScrapperWebClient implements AddLinkSpi {
                     .thenApply(WebClientBodyResponse::withBody)
                     .join();
         } catch (Exception e) {
+            log.error("Exception", e);
             return WebClientBodyResponse.fromException(e);
         }
     }
