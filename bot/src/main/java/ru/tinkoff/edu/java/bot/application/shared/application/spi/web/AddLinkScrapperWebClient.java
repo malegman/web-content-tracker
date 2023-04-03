@@ -45,9 +45,10 @@ public final class AddLinkScrapperWebClient implements AddLinkSpi {
                     .toFuture()
                     .thenApply(WebClientBodyResponse::withBody)
                     .join();
-        } catch (CompletionException e) {
-            return WebClientBodyResponse.fromWebClientResponseException((WebClientResponseException) e.getCause());
         } catch (Exception e) {
+            if (e.getCause() instanceof WebClientResponseException responseException) {
+                return WebClientBodyResponse.fromWebClientResponseException(responseException);
+            }
             log.error("Exception", e);
             return WebClientBodyResponse.fromException(e);
         }
