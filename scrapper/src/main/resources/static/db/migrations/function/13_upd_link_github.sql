@@ -1,14 +1,6 @@
 CREATE OR REPLACE FUNCTION scrapper.upd_link(_id BIGINT, _link VARCHAR(255), _link_data JSONB ,_id_tg_chat BIGINT)
   RETURNS VOID AS $$
 BEGIN
-  -- Проверка отсутствия чата телеграма
-  IF NOT EXISTS (SELECT FROM scrapper.t_tg_chat tc WHERE tc.id = _id_tg_chat) THEN
-    RAISE EXCEPTION 'Tg chat doesn''t exist.';
-  END IF;
-  -- Проверка отсутствия ссылки
-  IF NOT EXISTS (SELECT FROM scrapper.t_link l WHERE l.id = _id) THEN
-    RAISE EXCEPTION 'Link doesn''t exist.';
-  END IF;
   -- Проверка отсутствия ссылки у данного чата
   IF NOT EXISTS (SELECT FROM scrapper.t_tg_chat_link tcl WHERE tcl.id_link = _id AND tcl.id_tg_chat = _id_tg_chat) THEN
     RAISE EXCEPTION 'This tg chat hasn''t got that link.';
