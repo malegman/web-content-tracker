@@ -6,7 +6,7 @@ BEGIN
     RAISE EXCEPTION 'This tg chat hasn''t got that link.';
   END IF;
 
-  -- Обновление ссылки github
+  -- Обновление ссылки
   UPDATE scrapper.t_link
   SET c_link = _link,
       c_link_data = _link_data,
