@@ -9,4 +9,5 @@
 
     <includeAll path="classpath:static/db/migrations/schema/"/>
     <includeAll path="classpath:static/db/migrations/table/"/>
+    <includeAll path="classpath:static/db/migrations/function/"/>
 </databaseChangeLog>
