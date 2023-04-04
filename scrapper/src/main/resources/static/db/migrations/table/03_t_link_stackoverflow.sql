@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS scrapper.t_link_stackoverflow (
     id BIGSERIAL NOT NULL,
     c_link VARCHAR(255) NOT NULL,
+    c_question_id BIGINT NOT NULL,
     c_question_tags VARCHAR(50) [],
     c_question_is_answered BOOLEAN,
     c_question_last_activity_date TIMESTAMP WITH TIME ZONE,
