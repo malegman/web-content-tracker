@@ -49,7 +49,7 @@ public class DeleteTgChatHandlerFunctionIT {
 
         final var apiErrorResponse = matcher.getApiErrorResponse();
         Assertions.assertNotNull(apiErrorResponse);
-        Assertions.assertEquals(apiErrorResponse.description(), ErrorType.EXECUTION_FAILED.getDescription());
-        Assertions.assertEquals(apiErrorResponse.code(), ErrorType.EXECUTION_FAILED.getCode());
+        Assertions.assertEquals(apiErrorResponse.description(), ErrorType.VALIDATION_FAILED.getDescription());
+        Assertions.assertEquals(apiErrorResponse.code(), ErrorType.VALIDATION_FAILED.getCode());
     }
 }
