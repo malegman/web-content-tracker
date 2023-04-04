@@ -14,4 +14,4 @@ ALTER TABLE scrapper.t_link OWNER TO scrapper_owner;
 GRANT ALL ON TABLE scrapper.t_link TO scrapper_owner;
 REVOKE ALL ON TABLE scrapper.t_link FROM public;
 
-COMMENT ON TABLE scrapper.t_link_github IS 'Отслеживаемая ссылка';
+COMMENT ON TABLE scrapper.t_link IS 'Отслеживаемая ссылка';
