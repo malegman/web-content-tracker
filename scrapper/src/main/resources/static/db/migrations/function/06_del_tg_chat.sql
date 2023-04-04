@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION scrapper.del_tg_chat(_tg_chat_id BIGINT) RETURNS INTEGER AS $$
+CREATE OR REPLACE FUNCTION scrapper.del_tg_chat(_tg_chat_id BIGINT) RETURNS BIGINT AS $$
 DECLARE
   _id BIGINT;
 BEGIN
