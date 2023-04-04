@@ -24,7 +24,7 @@ public class IntegrationEnvironment {
     public DockerComposeContainer<?> postgresContainer() {
         return new DockerComposeContainer<>(new File("src/main/resources/static/db/docker-compose.yml"))
                 .withLogConsumer("postgresql", outputFrame -> log.info(outputFrame.getUtf8String()))
-                .waitingFor("postgresql", Wait.forLogMessage(".*Docker Compose has finished running.*", 1));
+                .waitingFor("postgresql", Wait.forLogMessage(".*ready for start up.*", 1));
     }
 
     @Bean
