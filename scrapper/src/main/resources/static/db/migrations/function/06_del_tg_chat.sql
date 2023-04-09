@@ -9,7 +9,7 @@ BEGIN
 
   -- Добавление чата телеграма
   DELETE FROM scrapper.t_tg_chat tc WHERE tc.c_tg_chat_id = _tg_chat_id
-  RETURNING id INTO _id;
+  RETURNING tc.id INTO _id;
 
   RETURN _id;
 END;

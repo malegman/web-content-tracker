@@ -2,15 +2,10 @@ CREATE OR REPLACE FUNCTION scrapper.set_tg_chat(_tg_chat_id BIGINT) RETURNS BIGI
 DECLARE
     _id BIGINT;
 BEGIN
-    -- Проверка существования чата телеграма
-    IF EXISTS (SELECT FROM scrapper.t_tg_chat tc WHERE tc.c_tg_chat_id = _tg_chat_id) THEN
-        RAISE EXCEPTION 'Tg chat already exists.';
-    END IF;
-
     -- Добавление чата телеграма
     INSERT INTO scrapper.t_tg_chat (c_tg_chat_id, c_date_create)
     VALUES (_tg_chat_id, now())
-    RETURNING id INTO _id;
+    RETURNING scrapper.t_tg_chat.id INTO _id;
 
     RETURN _id;
 END;

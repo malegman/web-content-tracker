@@ -4,7 +4,8 @@ DECLARE
     _id_tg_chat_link BIGINT;
 BEGIN
     -- Проверка отсутствия ссылки
-    IF NOT EXISTS (SELECT id INTO _id_link FROM scrapper.t_link l WHERE l.c_link = _link) THEN
+    SELECT l.id INTO _id_link FROM scrapper.t_link l WHERE l.c_link = _link;
+    IF _id_link IS NULL THEN
         RAISE EXCEPTION 'Link doesn''t exist.';
     END IF;
 
@@ -15,7 +16,7 @@ BEGIN
 
     -- Удаление ссылки у чата телеграма
     DELETE FROM scrapper.t_tg_chat_link tcl WHERE tcl.id_link = _id AND tcl.id_tg_chat = _id_tg_chat
-    RETURNING id INTO _id_tg_chat_link;
+    RETURNING scrapper.t_tg_chat_link.id INTO _id_tg_chat_link;
 
     -- Удаление ссылки, если она не отслеживается никаким чатом телеграма
     IF NOT EXISTS (SELECT FROM scrapper.t_tg_chat_link tcl WHERE tcl.id_link = _id_link) THEN

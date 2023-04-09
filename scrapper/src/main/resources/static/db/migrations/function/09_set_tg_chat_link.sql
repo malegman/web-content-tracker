@@ -6,7 +6,8 @@ DECLARE
   _id_tg_chat_link BIGINT;
 BEGIN
     -- Проверка отсутствия типа ссылки
-    IF NOT EXISTS (SELECT id INTO _id_link_type FROM scrapper.t_link_type lt WHERE lt.c_name = _link_type_name) THEN
+    SELECT lt.id INTO _id_link_type FROM scrapper.t_link_type lt WHERE lt.c_name = _link_type_name;
+    IF _id_link_type IS NULL THEN
         RAISE EXCEPTION 'Link type doesn''t exist.';
     END IF;
 
@@ -16,21 +17,23 @@ BEGIN
     END IF;
 
     -- Проверка отсутствия ссылки
-    IF NOT EXISTS (SELECT id INTO _id_link FROM scrapper.t_link l WHERE l.c_link = _link) THEN
+    SELECT l.id INTO _id_link FROM scrapper.t_link l WHERE l.c_link = _link;
+    IF _id_link IS NULL THEN
         -- Создание ссылки
         INSERT INTO scrapper.t_link (id_link_type, c_link, c_link_data, c_date_create, c_date_update)
         VALUES (_id_link_type, _link, _link_data, now(), now())
-        RETURNING id INTO _id_link;
-    END IF;
-
-    IF EXISTS (SELECT FROM scrapper.t_tg_chat_link tcl WHERE tcl.id_link = _id_link AND tcl.id_tg_chat = _id_tg_chat) THEN
-        RAISE EXCEPTION 'This tg chat already has that link.';
+        RETURNING scrapper.t_link.id INTO _id_link;
+    ELSE
+        -- Проверка наличия ссылки у данного чата
+        IF EXISTS (SELECT FROM scrapper.t_tg_chat_link tcl WHERE tcl.id_link = _id_link AND tcl.id_tg_chat = _id_tg_chat) THEN
+            RAISE EXCEPTION 'This tg chat already has that link.';
+        END IF;
     END IF;
 
     -- Добавление ссылки к телеграм чату
     INSERT INTO scrapper.t_tg_chat_link (id_tg_chat, id_link)
     VALUES (_id_tg_chat, _id_link)
-    RETURNING id INTO _id_tg_chat_link;
+    RETURNING scrapper.t_tg_chat_link.id INTO _id_tg_chat_link;
 
     RETURN _id_tg_chat_link;
 END;
