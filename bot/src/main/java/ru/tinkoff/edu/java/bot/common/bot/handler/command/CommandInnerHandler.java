@@ -9,8 +9,17 @@ import java.util.function.Consumer;
 /**
  * Интерфейс внутреннего обработчика команды
  */
-@FunctionalInterface
 public interface CommandInnerHandler extends Comparable<CommandInnerHandler> {
+
+    /**
+     * Возвращает порядок обработчика в команде
+     */
+    int getOrder();
+
+    /**
+     * Возвращает обрабатываемую команду
+     */
+    String getCommand();
 
     /**
      * Обрабатывает запрос бота.

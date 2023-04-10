@@ -10,6 +10,16 @@ import ru.tinkoff.edu.java.bot.common.bot.handler.command.CommandInnerHandler;
 public final class UnTrackGreetingCommandInnerFunction implements CommandInnerHandler {
 
     @Override
+    public int getOrder() {
+        return 1;
+    }
+
+    @Override
+    public String getCommand() {
+        return "/untrack";
+    }
+
+    @Override
     public Result innerHandle(BotRequest botRequest) {
         return Result.sendMessage(botRequest.tgChatId(), "Введите ссылку для удаления из отслеживания.").success();
     }
