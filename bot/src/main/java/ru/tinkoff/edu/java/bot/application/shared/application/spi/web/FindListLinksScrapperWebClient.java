@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -19,6 +20,7 @@ import java.util.Objects;
  * Реализация {@link FindListLinkSpi} с обращением к scrapper через web-client
  */
 @Slf4j
+@Component
 public final class FindListLinksScrapperWebClient implements FindListLinkSpi {
 
     private final WebClient scrapperWebClient;
