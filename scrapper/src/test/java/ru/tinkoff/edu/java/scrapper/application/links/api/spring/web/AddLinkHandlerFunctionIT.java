@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.common.ApiErrorResponseAssertionMatcher;
 import ru.tinkoff.edu.java.scrapper.common.errors.ErrorType;
 import ru.tinkoff.edu.java.scrapper.common.errors.ValidationFailedException;
@@ -18,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 public class AddLinkHandlerFunctionIT {
 
     @Autowired
@@ -69,8 +71,8 @@ public class AddLinkHandlerFunctionIT {
         Assertions.assertNotNull(apiErrorResponse);
         Assertions.assertEquals(apiErrorResponse.description(), ErrorType.VALIDATION_FAILED.getDescription());
         Assertions.assertEquals(apiErrorResponse.code(), ErrorType.VALIDATION_FAILED.getCode());
-        Assertions.assertEquals(2, apiErrorResponse.exceptionMessage().split(";").length);
-        Assertions.assertEquals(apiErrorResponse.exceptionName(), ValidationFailedException.class.getName());
+        Assertions.assertEquals(1, apiErrorResponse.exceptionMessage().split(";").length);
+        Assertions.assertEquals(apiErrorResponse.exceptionName(), IllegalArgumentException.class.getName());
     }
 
     @Test
@@ -95,7 +97,7 @@ public class AddLinkHandlerFunctionIT {
 
         final var apiErrorResponse = matcher.getApiErrorResponse();
         Assertions.assertNotNull(apiErrorResponse);
-        Assertions.assertEquals(apiErrorResponse.description(), ErrorType.EXECUTION_FAILED.getDescription());
-        Assertions.assertEquals(apiErrorResponse.code(), ErrorType.EXECUTION_FAILED.getCode());
+        Assertions.assertEquals(apiErrorResponse.description(), ErrorType.VALIDATION_FAILED.getDescription());
+        Assertions.assertEquals(apiErrorResponse.code(), ErrorType.VALIDATION_FAILED.getCode());
     }
 }

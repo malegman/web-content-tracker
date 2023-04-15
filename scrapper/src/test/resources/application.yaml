@@ -6,6 +6,10 @@ springdoc:
   swagger-ui:
     path: /swagger-ui
 spring:
+  profiles:
+    active: standalone
+  liquibase:
+    change-log: classpath:static/db/migrations/master.xml
   config:
     import:
       - file:///${user.home}/.config/web-content-tracker/scrapper/application.yaml

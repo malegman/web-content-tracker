@@ -1,0 +1,37 @@
+version: "3"
+services:
+  postgresql:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: scrapper_owner
+      POSTGRES_PASSWORD: scrapper_pwd
+      POSTGRES_DB: scrapper
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+        - backend
+  liquibase-migrations:
+    image: liquibase/liquibase:4.18
+    depends_on:
+        - postgresql
+    command:
+        - --hub-mode=off
+        - --changelog-file=master.xml
+        - --driver=org.postgresql.Driver
+        - --url=jdbc:postgresql://postgresql:5432/scrapper
+        - --username=scrapper_owner
+        - --password=scrapper_pwd
+        - update
+    volumes:
+        - ./migrations:/liquibase/changelog
+    networks:
+        - backend
+
+volumes:
+  postgresql_data:
+
+networks:
+  backend:
+    driver: bridge
