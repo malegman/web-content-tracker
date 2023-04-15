@@ -20,6 +20,16 @@ public final class TrackDataCommandInnerHandler implements CommandInnerHandler {
     }
 
     @Override
+    public int getOrder() {
+        return 2;
+    }
+
+    @Override
+    public String getCommand() {
+        return "/track";
+    }
+
+    @Override
     public Result innerHandle(BotRequest botRequest) {
 
         final var tgChatId = botRequest.tgChatId();

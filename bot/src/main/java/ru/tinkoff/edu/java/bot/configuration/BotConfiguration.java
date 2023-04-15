@@ -6,17 +6,18 @@ import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.tinkoff.edu.java.bot.common.bot.BotUtils;
 import ru.tinkoff.edu.java.bot.common.bot.handler.command.CommandHandler;
-import ru.tinkoff.edu.java.bot.common.bot.handler.command.CommandHandlerFactory;
 import ru.tinkoff.edu.java.bot.common.bot.handler.command.CommandHandlerManager;
+import ru.tinkoff.edu.java.bot.common.bot.handler.command.CommandInnerHandlerAnalyzer;
 
 import java.io.IOException;
-import java.util.function.Function;
+import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.stream.Collectors;
 
 @Configuration
@@ -24,16 +25,20 @@ import java.util.stream.Collectors;
 public class BotConfiguration {
 
     @Bean
-    public CommandHandlerManager handlerManager(ApplicationContext applicationContext) {
+    public CommandHandlerManager handlerManager(BeanFactory beanFactory) {
 
-        final var commandHandlers = applicationContext
-                .getBeansOfType(CommandHandlerFactory.class).values()
+        final var innerHandlerAnalyzer = new CommandInnerHandlerAnalyzer();
+
+        return new CommandHandlerManager(innerHandlerAnalyzer
+                .findCommandQueueInnerHandlers(beanFactory)
+                .entrySet()
                 .stream()
                 .collect(Collectors.toMap(
-                        CommandHandlerFactory::getCommand,
-                        Function.<Function<CommandHandlerManager, CommandHandler>>identity()));
-
-        return new CommandHandlerManager(commandHandlers);
+                        Map.Entry::getKey,
+                        entry ->
+                                commandInnerHandler -> new CommandHandler(
+                                        commandInnerHandler,
+                                        new PriorityQueue<>(entry.getValue())))));
     }
 
     @Bean

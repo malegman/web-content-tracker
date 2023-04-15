@@ -20,6 +20,16 @@ public final class UnTrackDataCommandInnerHandler implements CommandInnerHandler
     }
 
     @Override
+    public int getOrder() {
+        return 2;
+    }
+
+    @Override
+    public String getCommand() {
+        return "/untrack";
+    }
+
+    @Override
     public Result innerHandle(BotRequest botRequest) {
 
         final var tgChatId = botRequest.tgChatId();

@@ -20,6 +20,16 @@ public final class StartCommandInnerHandler implements CommandInnerHandler {
     }
 
     @Override
+    public int getOrder() {
+        return 1;
+    }
+
+    @Override
+    public String getCommand() {
+        return "/start";
+    }
+
+    @Override
     public Result innerHandle(BotRequest botRequest) {
 
         final var tgChatId = botRequest.tgChatId();

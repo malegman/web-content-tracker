@@ -13,6 +13,16 @@ import ru.tinkoff.edu.java.bot.common.bot.handler.command.CommandInnerHandler;
 public final class HelpCommandInnerHandler implements CommandInnerHandler {
 
     @Override
+    public int getOrder() {
+        return 1;
+    }
+
+    @Override
+    public String getCommand() {
+        return "/help";
+    }
+
+    @Override
     public Result innerHandle(BotRequest botRequest) {
 
         return Result.sendMessage(botRequest.tgChatId(), """
