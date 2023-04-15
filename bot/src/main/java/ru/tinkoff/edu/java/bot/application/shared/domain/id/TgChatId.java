@@ -1,7 +1,7 @@
 package ru.tinkoff.edu.java.bot.application.shared.domain.id;
 
 /**
- * Идентификатор чата телеграмма
+ * Идентификатор чата телеграма
  */
 public record TgChatId(long value) {
 

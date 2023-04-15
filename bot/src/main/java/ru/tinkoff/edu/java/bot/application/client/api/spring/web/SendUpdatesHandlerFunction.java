@@ -10,8 +10,8 @@ import ru.tinkoff.edu.java.bot.application.client.api.SendUpdatesApi.Result.Visi
 import ru.tinkoff.edu.java.bot.application.shared.application.dto.request.LinkUpdateRequest;
 import ru.tinkoff.edu.java.bot.application.shared.domain.id.LinkId;
 import ru.tinkoff.edu.java.bot.application.shared.domain.id.TgChatId;
-import ru.tinkoff.edu.java.bot.common.errors.ValidationFailedException;
-import ru.tinkoff.edu.java.bot.common.spring.web.AbstractBotHandlerFunction;
+import ru.tinkoff.edu.java.bot.common.api.errors.ValidationFailedException;
+import ru.tinkoff.edu.java.bot.common.api.spring.web.AbstractBotHandlerFunction;
 
 import java.util.Objects;
 

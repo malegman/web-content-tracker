@@ -3,7 +3,7 @@ package ru.tinkoff.edu.java.bot.common;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.matcher.AssertionMatcher;
-import ru.tinkoff.edu.java.bot.common.errors.ApiErrorResponse;
+import ru.tinkoff.edu.java.bot.common.api.errors.ApiErrorResponse;
 
 import java.util.Objects;
 

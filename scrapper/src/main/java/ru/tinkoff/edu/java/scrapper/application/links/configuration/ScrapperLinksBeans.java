@@ -23,7 +23,6 @@ import ru.tinkoff.edu.java.scrapper.application.links.usecase.AddLinkUseCase;
 import ru.tinkoff.edu.java.scrapper.application.links.usecase.DeleteLinkUseCase;
 import ru.tinkoff.edu.java.scrapper.application.links.usecase.FindLinksUseCase;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.request.AddLinkRequest;
-import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.request.RemoveLinkRequest;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.response.LinkResponse;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.response.ListLinksResponse;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.AddLinkSpi;
@@ -110,7 +109,7 @@ public class ScrapperLinksBeans {
                                     schema = @Schema(implementation = ApiErrorResponse.class))),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "Чат не существует")}))
+                            description = "Чат или ссылка не существует")}))
     public RouterFunction<ServerResponse> addLinkRouterFunction(
             final BeanFactory beanFactory,
             final AddLinkSpi addLinkSpi) {
@@ -138,12 +137,12 @@ public class ScrapperLinksBeans {
                             in = ParameterIn.HEADER,
                             required = true,
                             description = "Идентификатор чата",
-                            schema = @Schema(implementation = Long.class))},
-            requestBody = @RequestBody(
-                    required = true,
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = RemoveLinkRequest.class))),
+                            schema = @Schema(implementation = Long.class)),
+                    @Parameter(
+                            name = "url",
+                            in = ParameterIn.QUERY,
+                            description = "Ссылка для удаления из списка отслеживания",
+                            schema = @Schema(implementation = String.class))},
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -159,7 +158,10 @@ public class ScrapperLinksBeans {
                                     schema = @Schema(implementation = ApiErrorResponse.class))),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "Чат не существует")}))
+                            description = "Чат не существует"),
+                    @ApiResponse(
+                            responseCode = "409",
+                            description = "Ссылка уже отслеживается")}))
     public RouterFunction<ServerResponse> deleteLinkRouterFunction(
             final BeanFactory beanFactory,
             final DeleteLinkSpi deleteLinkSpi) {
@@ -170,8 +172,7 @@ public class ScrapperLinksBeans {
 
         return route()
                 .DELETE("/links",
-                        RequestPredicates.contentType(MediaType.APPLICATION_JSON)
-                                .and(RequestPredicates.accept(MediaType.APPLICATION_JSON)),
+                        RequestPredicates.accept(MediaType.APPLICATION_JSON),
                         handlerFunction)
                 .build();
     }

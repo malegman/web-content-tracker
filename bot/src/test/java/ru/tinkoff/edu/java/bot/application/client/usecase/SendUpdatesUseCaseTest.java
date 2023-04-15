@@ -10,7 +10,7 @@ import ru.tinkoff.edu.java.bot.application.client.api.SendUpdatesApi.Result;
 import ru.tinkoff.edu.java.bot.application.shared.application.spi.SendUpdatesSpi;
 import ru.tinkoff.edu.java.bot.application.shared.domain.id.LinkId;
 import ru.tinkoff.edu.java.bot.application.shared.domain.id.TgChatId;
-import ru.tinkoff.edu.java.bot.common.validation.Validation;
+import ru.tinkoff.edu.java.bot.common.api.validation.Validation;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -123,6 +123,8 @@ paths:
                 "$ref": "#/components/schemas/ApiErrorResponse"
         '404':
           description: Чат не существует
+        '409':
+          description: Ссылка уже отслеживается
     delete:
       tags:
         - links
@@ -136,12 +138,13 @@ paths:
           schema:
             type: integer
             format: int64
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/RemoveLinkRequest"
-        required: true
+        - name: link
+          in: query
+          required: true
+          description: Ссылка для удаления из списка отслеживания
+          schema:
+            type: string
+            format: uri
       responses:
         '200':
           description: Ссылка успешно убрана
@@ -156,7 +159,7 @@ paths:
               schema:
                 "$ref": "#/components/schemas/ApiErrorResponse"
         '404':
-          description: Чат не существует
+          description: Чат или ссылка не существует
 components:
   schemas:
     LinkResponse:
@@ -199,10 +202,4 @@ components:
         size:
           type: integer
           format: int32
-    RemoveLinkRequest:
-      type: object
-      properties:
-        link:
-          type: string
-          format: uri
   

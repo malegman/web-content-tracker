@@ -88,6 +88,8 @@ public abstract class AbstractScrapperHandlerFunction implements HandlerFunction
 
         if (exception instanceof ValidationFailedException) {
             apiErrorResponseBuilder.errorType(ErrorType.VALIDATION_FAILED);
+        } else if (exception instanceof IllegalArgumentException) {
+            apiErrorResponseBuilder.errorType(ErrorType.VALIDATION_FAILED);
         } else {
             apiErrorResponseBuilder.errorType(ErrorType.EXECUTION_FAILED);
         }
