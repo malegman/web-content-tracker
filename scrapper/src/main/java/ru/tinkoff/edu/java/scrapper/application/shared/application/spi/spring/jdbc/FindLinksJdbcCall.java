@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.object.MappingSqlQuery;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.TgChatLinkDto;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.FindLinksSpi;
-import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.exception.TgChatLinkAlreadyExistsException;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.exception.TgChatLinkNotExistsException;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.exception.TgChatNotExistsException;
 import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.LinkType;
@@ -22,7 +21,7 @@ import java.util.Map;
 /**
  * Реализация {@link FindLinksSpi}, с использованием {@link MappingSqlQuery}
  */
-public final class FindLinksSpiJdbcCall extends MappingSqlQuery<TgChatLinkDto> implements FindLinksSpi {
+public final class FindLinksJdbcCall extends MappingSqlQuery<TgChatLinkDto> implements FindLinksSpi {
 
     private static final String SQL_QUERY =
             "SELECT * FROM scrapper.get_tg_chat_link(:_id_tg_chat);";
@@ -33,7 +32,7 @@ public final class FindLinksSpiJdbcCall extends MappingSqlQuery<TgChatLinkDto> i
     private static final String COLUMN_LINK = "c_link";
     private static final String COLUMN_NAME = "c_name";
 
-    public FindLinksSpiJdbcCall(DataSource dataSource) {
+    public FindLinksJdbcCall(DataSource dataSource) {
         super(dataSource, SQL_QUERY);
         this.declareParameter(new SqlParameter(PARAMETER_ID_TG_CHAT, Types.BIGINT));
         this.compile();

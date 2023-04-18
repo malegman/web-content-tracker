@@ -47,7 +47,10 @@ public class ScrapperTgChatBeans {
                             description = "Некорректные параметры запроса",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ApiErrorResponse.class)))}))
+                                    schema = @Schema(implementation = ApiErrorResponse.class))),
+                    @ApiResponse(
+                            responseCode = "409",
+                            description = "Чат уже зарегистрирован")}))
     public RouterFunction<ServerResponse> registerTgChatRouterFunction(
             final BeanFactory beanFactory,
             final RegisterTgChatSpi registerTgChatSpi) {

@@ -63,13 +63,9 @@ public final class RegisterTgChatHandlerFunction extends AbstractScrapperHandler
         }
 
         @Override
-        public void onExecutionFailed(ExecutionFailed result) {
+        public void onAlreadyExists(AlreadyExists result) {
 
-            final var exception = result.exception();
-
-            // TODO обработка ошибки выполнения операции
-
-            throw new RuntimeException(exception);
+            this.serverResponse = SR_CONFLICT;
         }
     }
 }

@@ -63,13 +63,9 @@ public final class DeleteTgChatHandlerFunction extends AbstractScrapperHandlerFu
         }
 
         @Override
-        public void onExecutionFailed(ExecutionFailed result) {
+        public void onExecutionFailed(NotFound result) {
 
-            final var exception = result.exception();
-
-            // TODO обработка ошибки выполнения операции
-
-            throw new RuntimeException(exception);
+            this.serverResponse = SR_NOT_FOUND;
         }
     }
 }

@@ -71,7 +71,7 @@ public abstract class RegisterTgChatApi extends Invocation<RegisterTgChatApi.Pay
 
             void onValidationFailed(ValidationFailed result);
 
-            void onExecutionFailed(ExecutionFailed result);
+            void onAlreadyExists(AlreadyExists result);
         }
 
         enum Success implements Result {
@@ -96,11 +96,12 @@ public abstract class RegisterTgChatApi extends Invocation<RegisterTgChatApi.Pay
             }
         }
 
-        record ExecutionFailed(Exception exception) implements Result {
+        enum AlreadyExists implements Result {
+            INSTANCE;
 
             @Override
             public void visit(Visitor visitor) {
-                visitor.onExecutionFailed(this);
+                visitor.onAlreadyExists(this);
             }
         }
 
@@ -112,8 +113,8 @@ public abstract class RegisterTgChatApi extends Invocation<RegisterTgChatApi.Pay
             return new ValidationFailed(validation);
         }
 
-        static ExecutionFailed executionFailed(final Exception exception) {
-            return new ExecutionFailed(exception);
+        static AlreadyExists alreadyExists() {
+            return AlreadyExists.INSTANCE;
         }
     }
 }

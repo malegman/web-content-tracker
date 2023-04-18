@@ -1,6 +1,7 @@
 package ru.tinkoff.edu.java.scrapper.application.tgchat.usecase;
 
 import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.DeleteTgChatSpi;
+import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.exception.TgChatNotExistsException;
 import ru.tinkoff.edu.java.scrapper.application.tgchat.api.DeleteTgChatApi;
 
 import java.util.Objects;
@@ -22,8 +23,8 @@ public final class DeleteTgChatUseCase extends DeleteTgChatApi {
         try {
             this.deleteTgChatSpi.deleteTgChat(payload.id());
             return Result.success();
-        } catch (Exception e) {
-            return Result.executionFailed(e);
+        } catch (TgChatNotExistsException e) {
+            return Result.notFound();
         }
     }
 }
