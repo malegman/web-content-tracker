@@ -48,10 +48,10 @@ public class LinkParserTest {
         Mockito.doReturn(githubSuccess).when(this.gitHubPayloadProcessor).processSuccess(success);
 
         final var result = this.parser.parse(link);
+        result.visit((value) -> {});
 
         assertFalse(result.isFailed());
         assertEquals(success, result);
-        assertEquals(githubSuccess, result.process());
         verifyNoMoreInteractions(this.gitHubPayloadProcessor);
         verifyNoInteractions(this.stackOverflowPayloadProcessor);
     }
@@ -69,10 +69,10 @@ public class LinkParserTest {
         Mockito.doReturn(stackoverflowSuccess).when(this.stackOverflowPayloadProcessor).processSuccess(success);
 
         final var result = this.parser.parse(link);
+        result.visit((value) -> {});
 
         assertFalse(result.isFailed());
         assertEquals(success, result);
-        assertEquals(stackoverflowSuccess, result.process());
         verifyNoMoreInteractions(this.stackOverflowPayloadProcessor);
         verifyNoInteractions(this.gitHubPayloadProcessor);
     }
@@ -86,7 +86,6 @@ public class LinkParserTest {
 
         assertTrue(result.isFailed());
         assertEquals(LinkParser.Result.failed(), result);
-        assertNull(result.process());
         verifyNoInteractions(this.stackOverflowPayloadProcessor, this.gitHubPayloadProcessor);
     }
 }

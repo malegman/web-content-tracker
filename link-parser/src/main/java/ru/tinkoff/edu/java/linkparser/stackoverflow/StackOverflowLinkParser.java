@@ -40,13 +40,13 @@ public final class StackOverflowLinkParser<T> extends LinkParser<T> {
         record Success<T>(StackOverflowPayload payload, Processor<T> processor) implements Result<T> {
 
             @Override
-            public boolean isFailed() {
-                return false;
+            public void visit(Visitor<T> visitor) {
+                visitor.setValue(this.processor.processSuccess(this));
             }
 
             @Override
-            public T process() {
-                return this.processor.processSuccess(this);
+            public boolean isFailed() {
+                return false;
             }
         }
 
@@ -56,8 +56,6 @@ public final class StackOverflowLinkParser<T> extends LinkParser<T> {
 
         /**
          * Интерфейс процессора, обрабатывающего результат разбора ссылки
-         *
-         * @param <T> тип обработки результата работы парсера
          */
         interface Processor<T> {
 
