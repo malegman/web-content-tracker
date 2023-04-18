@@ -2,12 +2,15 @@ package ru.tinkoff.edu.java.scrapper.application.shared.application.spi.spring.j
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.GitHubUpdatesDto;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.StackOverflowUpdatesDto;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.AddLinkGitHubSpi;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.AddLinkStackOverflowSpi;
+import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.exception.TgChatLinkAlreadyExistsException;
+import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.exception.TgChatNotExistsException;
 import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.LinkId;
 import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.LinkType;
 import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.TgChatId;
@@ -59,6 +62,14 @@ public final class AddLinkJdbcCall extends SimpleJdbcCall
                             PARAMETER_LINK_DATA, this.objectMapper.writeValueAsString(dto),
                             PARAMETER_ID_TG_CHAT, tgChatId.value()
                     )));
+        } catch (DataAccessException e) {
+            final var message = e.getMessage();
+            if (message.contains("Tg chat doesn't exist.")) {
+                throw new TgChatNotExistsException();
+            } else if (message.contains("This tg chat already has that link.")) {
+                throw new TgChatLinkAlreadyExistsException();
+            }
+            throw e;
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -74,6 +85,14 @@ public final class AddLinkJdbcCall extends SimpleJdbcCall
                             PARAMETER_LINK_DATA, this.objectMapper.writeValueAsString(dto),
                             PARAMETER_ID_TG_CHAT, tgChatId.value()
                     )));
+        } catch (DataAccessException e) {
+            final var message = e.getMessage();
+            if (message.contains("Tg chat doesn't exist.")) {
+                throw new TgChatNotExistsException();
+            } else if (message.contains("This tg chat already has that link.")) {
+                throw new TgChatLinkAlreadyExistsException();
+            }
+            throw e;
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
