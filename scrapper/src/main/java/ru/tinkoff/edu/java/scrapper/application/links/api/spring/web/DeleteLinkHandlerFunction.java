@@ -67,7 +67,7 @@ public final class DeleteLinkHandlerFunction extends AbstractScrapperHandlerFunc
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(new LinkResponse(
                             link.id().value(),
-                            link.url()));
+                            link.link()));
         }
 
         @Override

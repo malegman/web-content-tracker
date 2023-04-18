@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.tinkoff.edu.java.scrapper.common.invocation.Invocation;
 import ru.tinkoff.edu.java.scrapper.common.validation.Validation;
-import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.LinkDto;
+import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.TgChatLinkDto;
 import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.TgChatId;
 
 import java.util.List;
@@ -73,10 +73,10 @@ public abstract class FindLinksApi extends Invocation<FindLinksApi.Payload,
 
             void onValidationFailed(ValidationFailed result);
 
-            void onExecutionFailed(ExecutionFailed result);
+            void onNotFound(NotFound result);
         }
 
-        record Success(List<LinkDto> links) implements Result {
+        record Success(List<TgChatLinkDto> links) implements Result {
 
             @Override
             public boolean isFailed() {
@@ -97,15 +97,16 @@ public abstract class FindLinksApi extends Invocation<FindLinksApi.Payload,
             }
         }
 
-        record ExecutionFailed(Exception exception) implements Result {
+        enum NotFound implements Result {
+            INSTANCE;
 
             @Override
             public void visit(Visitor visitor) {
-                visitor.onExecutionFailed(this);
+                visitor.onNotFound(this);
             }
         }
 
-        static Success success(final List<LinkDto> links) {
+        static Success success(final List<TgChatLinkDto> links) {
             return new Success(links);
         }
 
@@ -113,8 +114,8 @@ public abstract class FindLinksApi extends Invocation<FindLinksApi.Payload,
             return new ValidationFailed(validation);
         }
 
-        static ExecutionFailed executionFailed(final Exception exception) {
-            return new ExecutionFailed(exception);
+        static NotFound notFound() {
+            return NotFound.INSTANCE;
         }
     }
 }

@@ -2,6 +2,7 @@ package ru.tinkoff.edu.java.scrapper.application.links.usecase;
 
 import ru.tinkoff.edu.java.scrapper.application.links.api.FindLinksApi;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.FindLinksSpi;
+import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.exception.TgChatNotExistsException;
 
 import java.util.Objects;
 
@@ -20,9 +21,14 @@ public final class FindLinksUseCase extends FindLinksApi {
     protected Result invokeInternal(Payload payload) {
 
         try {
-            return Result.success(this.findLinksSpi.findLinks(payload.tgChatId()));
-        } catch (Exception e) {
-            return Result.executionFailed(e);
+            final var links = this.findLinksSpi.findLinks(payload.tgChatId());
+            if (links.isEmpty()) {
+                return Result.notFound();
+            } else {
+                return Result.success(links);
+            }
+        } catch (TgChatNotExistsException e) {
+            return Result.notFound();
         }
     }
 }

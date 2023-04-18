@@ -30,6 +30,7 @@ import java.util.UUID;
 public abstract class AbstractScrapperHandlerFunction implements HandlerFunction<ServerResponse>, BeanFactoryAware {
 
     public static final ServerResponse SR_NO_CONTENT = ServerResponse.noContent().build();
+    public static final ServerResponse SR_NOT_FOUND= ServerResponse.notFound().build();
     public static final ServerResponse SR_CONFLICT = ServerResponse.status(HttpStatus.CONFLICT).build();
 
     private final TransactionDefinition transactionDefinition;
