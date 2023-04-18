@@ -1,15 +1,13 @@
-package ru.tinkoff.edu.java.scrapper.application.shared.application.spi.web;
+package ru.tinkoff.edu.java.scrapper.application.shared.application.spi.spring.web;
 
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.StackOverflowUpdatesDto;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.response.FindQuestionStackOverflowResponse;
-import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.response.FindRepoGitHubResponse;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.FindGitHubUpdatesSpi;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.FindStackOverflowUpdatesSpi;
 import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.StackOverflowQuestionId;
-import ru.tinkoff.edu.java.scrapper.application.shared.utils.GitHubUtils;
 import ru.tinkoff.edu.java.scrapper.application.shared.utils.StackOverflowUtils;
 
 import java.util.Objects;
@@ -29,11 +27,14 @@ public final class FindStackOverflowUpdatesWebClient implements FindStackOverflo
     @Override
     public Optional<StackOverflowUpdatesDto> findStackOverflowUpdates(final StackOverflowQuestionId questionId) {
 
-        return this.stackOverflowWebClient.get().uri("/2.3/questions/{questionId}?order=desc&sort=activity&site=stackoverflow", questionId.value())
-                .retrieve()
-                .onStatus(HttpStatusCode::isError, ClientResponse::createException)
-                .bodyToMono(FindQuestionStackOverflowResponse.class)
-                .mapNotNull(StackOverflowUtils::dtoFromResponse)
-                .blockOptional();
+        return Optional.ofNullable(
+                this.stackOverflowWebClient.get()
+                        .uri("/2.3/questions/{questionId}?order=desc&sort=activity&site=stackoverflow", questionId.value())
+                        .retrieve()
+                        .onStatus(HttpStatusCode::isError, ClientResponse::createException)
+                        .bodyToMono(FindQuestionStackOverflowResponse.class)
+                        .mapNotNull(StackOverflowUtils::dtoFromResponse)
+                        .toFuture()
+                        .join());
     }
 }

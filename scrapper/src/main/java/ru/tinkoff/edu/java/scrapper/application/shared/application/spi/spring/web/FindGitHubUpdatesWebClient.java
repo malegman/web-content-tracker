@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.application.shared.application.spi.web;
+package ru.tinkoff.edu.java.scrapper.application.shared.application.spi.spring.web;
 
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.reactive.function.client.ClientResponse;
@@ -25,11 +25,12 @@ public final class FindGitHubUpdatesWebClient implements FindGitHubUpdatesSpi {
     @Override
     public Optional<GitHubUpdatesDto> findGitHubUpdates(final String owner, final String repo) {
 
-        return this.gitHubWebClient.get().uri("/repos/{owner}/{repo}", owner, repo)
+        return Optional.ofNullable(this.gitHubWebClient.get().uri("/repos/{owner}/{repo}", owner, repo)
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, ClientResponse::createException)
                 .bodyToMono(FindRepoGitHubResponse.class)
                 .mapNotNull(GitHubUtils::dtoFromResponse)
-                .blockOptional();
+                .toFuture()
+                .join());
     }
 }
