@@ -39,7 +39,7 @@ public abstract class LinkParser<T> {
      *
      * @return результат разбора ссылки
      */
-    protected abstract Result<T> parse(String link);
+    public abstract Result<T> parse(String link);
 
     /**
      * Метод, вызываемый при разборе строки, для вызова следующего по цепочке парсера
