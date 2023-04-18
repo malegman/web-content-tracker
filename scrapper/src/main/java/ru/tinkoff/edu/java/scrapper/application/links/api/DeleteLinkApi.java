@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.tinkoff.edu.java.scrapper.common.invocation.Invocation;
 import ru.tinkoff.edu.java.scrapper.common.validation.Validation;
-import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.LinkDto;
+import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.TgChatLinkDto;
 import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.TgChatId;
 
 import java.util.Objects;
@@ -84,10 +84,10 @@ public abstract class DeleteLinkApi extends Invocation<DeleteLinkApi.Payload,
 
             void onValidationFailed(ValidationFailed result);
 
-            void onExecutionFailed(ExecutionFailed result);
+            void onExecutionFailed(NotFound result);
         }
 
-        record Success(LinkDto link) implements Result {
+        record Success(TgChatLinkDto link) implements Result {
 
             @Override
             public boolean isFailed() {
@@ -108,7 +108,8 @@ public abstract class DeleteLinkApi extends Invocation<DeleteLinkApi.Payload,
             }
         }
 
-        record ExecutionFailed(Exception exception) implements Result {
+        enum NotFound implements Result {
+            INSTANCE;
 
             @Override
             public void visit(Visitor visitor) {
@@ -116,7 +117,7 @@ public abstract class DeleteLinkApi extends Invocation<DeleteLinkApi.Payload,
             }
         }
 
-        static Success success(final LinkDto link) {
+        static Success success(final TgChatLinkDto link) {
             return new Success(link);
         }
 
@@ -124,8 +125,8 @@ public abstract class DeleteLinkApi extends Invocation<DeleteLinkApi.Payload,
             return new ValidationFailed(validation);
         }
 
-        static ExecutionFailed executionFailed(final Exception exception) {
-            return new ExecutionFailed(exception);
+        static NotFound notFound() {
+            return NotFound.INSTANCE;
         }
     }
 }
