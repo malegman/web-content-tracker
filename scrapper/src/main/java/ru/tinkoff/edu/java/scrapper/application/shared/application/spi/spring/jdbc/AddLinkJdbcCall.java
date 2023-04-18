@@ -11,7 +11,6 @@ import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.AddLinkGi
 import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.AddLinkStackOverflowSpi;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.exception.TgChatLinkAlreadyExistsException;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.exception.TgChatNotExistsException;
-import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.LinkId;
 import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.LinkType;
 import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.TgChatId;
 import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.TgChatLinkId;
