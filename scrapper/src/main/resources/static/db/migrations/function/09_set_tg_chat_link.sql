@@ -1,5 +1,5 @@
 CREATE OR REPLACE FUNCTION scrapper.set_tg_chat_link(_link VARCHAR(255), _link_type_name VARCHAR(50), _link_data JSONB, _id_tg_chat BIGINT)
-  RETURNS INTEGER AS $$
+  RETURNS BIGINT AS $$
 DECLARE
   _id_link BIGINT;
   _id_link_type INTEGER;
