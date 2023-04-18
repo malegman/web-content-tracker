@@ -9,6 +9,11 @@ BEGIN
         RAISE EXCEPTION 'Link doesn''t exist.';
     END IF;
 
+    -- Проверка отсутствия чата
+    IF NOT EXISTS (SELECT FROM scrapper.t_tg_chat tc WHERE tc.id = _id_tg_chat) THEN
+        RAISE EXCEPTION 'Tg chat doesn''t exist.';
+    END IF;
+
     -- Проверка отсутствия ссылки у данного чата
     IF NOT EXISTS (SELECT FROM scrapper.t_tg_chat_link tcl WHERE tcl.id_link = _id AND tcl.id_tg_chat = _id_tg_chat) THEN
         RAISE EXCEPTION 'This tg chat hasn''t got that link.';

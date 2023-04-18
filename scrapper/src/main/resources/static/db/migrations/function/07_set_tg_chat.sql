@@ -1,10 +1,10 @@
-CREATE OR REPLACE FUNCTION scrapper.set_tg_chat(_tg_chat_id BIGINT) RETURNS BIGINT AS $$
+CREATE OR REPLACE FUNCTION scrapper.set_tg_chat(_id_tg_chat BIGINT) RETURNS BIGINT AS $$
 DECLARE
     _id BIGINT;
 BEGIN
     -- Добавление чата телеграма
     INSERT INTO scrapper.t_tg_chat (c_tg_chat_id, c_date_create)
-    VALUES (_tg_chat_id, now())
+    VALUES (_id_tg_chat, now())
     RETURNING scrapper.t_tg_chat.id INTO _id;
 
     RETURN _id;
