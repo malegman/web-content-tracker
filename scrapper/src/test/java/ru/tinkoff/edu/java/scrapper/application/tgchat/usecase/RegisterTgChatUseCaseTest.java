@@ -80,7 +80,7 @@ public class RegisterTgChatUseCaseTest {
                 .id(tgChatId));
 
         // then
-        assertEquals(Result.executionFailed(exception), result);
+        assertEquals(Result.alreadyExists(), result);
         verifyNoMoreInteractions(this.registerTgChatSpi);
     }
 }

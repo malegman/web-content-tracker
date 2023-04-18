@@ -1,6 +1,7 @@
 package ru.tinkoff.edu.java.scrapper.application.tgchat.usecase;
 
 import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.RegisterTgChatSpi;
+import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.exception.TgChatAlreadyExistsException;
 import ru.tinkoff.edu.java.scrapper.application.tgchat.api.RegisterTgChatApi;
 
 import java.util.Objects;
@@ -22,8 +23,8 @@ public final class RegisterTgChatUseCase extends RegisterTgChatApi {
         try {
             this.registerTgChatSpi.registerTgChat(payload.id());
             return Result.success();
-        } catch (Exception e) {
-            return Result.executionFailed(e);
+        } catch (TgChatAlreadyExistsException e) {
+            return Result.alreadyExists();
         }
     }
 }

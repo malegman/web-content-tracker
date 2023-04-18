@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.tinkoff.edu.java.scrapper.common.invocation.Invocation;
 import ru.tinkoff.edu.java.scrapper.common.validation.Validation;
-import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.LinkDto;
+import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.TgChatLinkDto;
 import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.TgChatId;
 
 import java.util.Objects;
@@ -84,10 +84,10 @@ public abstract class AddLinkApi extends Invocation<AddLinkApi.Payload,
 
             void onValidationFailed(ValidationFailed result);
 
-            void onExecutionFailed(ExecutionFailed result);
+            void onLinkAlreadyExists(LinkAlreadyExists result);
         }
 
-        record Success(LinkDto link) implements Result {
+        record Success(TgChatLinkDto link) implements Result {
 
             @Override
             public boolean isFailed() {
@@ -108,15 +108,16 @@ public abstract class AddLinkApi extends Invocation<AddLinkApi.Payload,
             }
         }
 
-        record ExecutionFailed(Exception exception) implements Result {
+        enum LinkAlreadyExists implements Result {
+            INSTANCE;
 
             @Override
             public void visit(Visitor visitor) {
-                visitor.onExecutionFailed(this);
+                visitor.onLinkAlreadyExists(this);
             }
         }
 
-        static Success success(final LinkDto link) {
+        static Success success(final TgChatLinkDto link) {
             return new Success(link);
         }
 
@@ -124,8 +125,8 @@ public abstract class AddLinkApi extends Invocation<AddLinkApi.Payload,
             return new ValidationFailed(validation);
         }
 
-        static ExecutionFailed executionFailed(final Exception exception) {
-            return new ExecutionFailed(exception);
+        static LinkAlreadyExists linkAlreadyExists() {
+            return LinkAlreadyExists.INSTANCE;
         }
     }
 }

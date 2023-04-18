@@ -39,7 +39,7 @@ public abstract class LinkParser<T> {
      *
      * @return результат разбора ссылки
      */
-    protected abstract Result<T> parse(String link);
+    public abstract Result<T> parse(String link);
 
     /**
      * Метод, вызываемый при разборе строки, для вызова следующего по цепочке парсера
@@ -66,6 +66,20 @@ public abstract class LinkParser<T> {
     public interface Result<T> {
 
         /**
+         * Класс-посетитель результата парсера
+         * @param <T> тип обработки результата работы парсера
+         */
+        interface Visitor<T> {
+
+            void setValue(T value);
+        }
+
+        /**
+         * Метод для посещения результата парсера
+         */
+        void visit(Visitor<T> visitor);
+
+        /**
          * Проверяет успешность результата
          *
          * @return true, если результат неуспешный
@@ -75,22 +89,13 @@ public abstract class LinkParser<T> {
         }
 
         /**
-         * Метод для обработки результата парсера
-         *
-         * @return объект, полученный в результате обработки результата
-         */
-        T process();
-
-        /**
          * Возвращает проваленный результат (результат - заглушка)
          *
          * @return результат
-         * @param <R> класс-реализация интерфейса результата
          * @param <T> тип обработки результата работы парсера
          */
-        @SuppressWarnings("unchecked")
-        static <R extends Result<T>, T> R failed() {
-            return (R) (Result<T>) () -> null;
+        static <T> Result<T> failed() {
+            return visitor -> {};
         }
     }
 }

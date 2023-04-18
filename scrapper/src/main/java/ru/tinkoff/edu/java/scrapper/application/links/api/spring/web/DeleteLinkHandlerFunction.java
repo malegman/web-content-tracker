@@ -10,7 +10,6 @@ import ru.tinkoff.edu.java.scrapper.application.links.api.DeleteLinkApi;
 import ru.tinkoff.edu.java.scrapper.application.links.api.DeleteLinkApi.Payload;
 import ru.tinkoff.edu.java.scrapper.application.links.api.DeleteLinkApi.Result.*;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.response.LinkResponse;
-import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.LinkId;
 import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.TgChatId;
 import ru.tinkoff.edu.java.scrapper.common.errors.ValidationFailedException;
 import ru.tinkoff.edu.java.scrapper.common.spring.web.AbstractScrapperHandlerFunction;
@@ -67,8 +66,8 @@ public final class DeleteLinkHandlerFunction extends AbstractScrapperHandlerFunc
                     .ok()
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(new LinkResponse(
-                            LinkId.valueFrom(link.id()),
-                            link.url()));
+                            link.id().value(),
+                            link.link()));
         }
 
         @Override
@@ -77,13 +76,9 @@ public final class DeleteLinkHandlerFunction extends AbstractScrapperHandlerFunc
         }
 
         @Override
-        public void onExecutionFailed(ExecutionFailed result) {
+        public void onExecutionFailed(NotFound result) {
 
-            final var exception = result.exception();
-
-            // TODO обработка ошибки выполнения операции
-
-            throw new RuntimeException(exception);
+            this.serverResponse = SR_NOT_FOUND;
         }
     }
 }

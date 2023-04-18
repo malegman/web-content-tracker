@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.servlet.function.RequestPredicates;
 import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.ServerResponse;
+import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.*;
 import ru.tinkoff.edu.java.scrapper.common.errors.ApiErrorResponse;
 import ru.tinkoff.edu.java.scrapper.application.links.api.spring.web.AddLinkHandlerFunction;
 import ru.tinkoff.edu.java.scrapper.application.links.api.spring.web.DeleteLinkHandlerFunction;
@@ -25,9 +26,6 @@ import ru.tinkoff.edu.java.scrapper.application.links.usecase.FindLinksUseCase;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.request.AddLinkRequest;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.response.LinkResponse;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.response.ListLinksResponse;
-import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.AddLinkSpi;
-import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.DeleteLinkSpi;
-import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.FindLinksSpi;
 
 import static org.springframework.web.servlet.function.RouterFunctions.route;
 
@@ -109,13 +107,23 @@ public class ScrapperLinksBeans {
                                     schema = @Schema(implementation = ApiErrorResponse.class))),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "Чат или ссылка не существует")}))
+                            description = "Чат или ссылка не существует"),
+                    @ApiResponse(
+                            responseCode = "409",
+                            description = "Ссылка уже отслеживается")}))
     public RouterFunction<ServerResponse> addLinkRouterFunction(
             final BeanFactory beanFactory,
-            final AddLinkSpi addLinkSpi) {
+            final AddLinkGitHubSpi addLinkGitHubSpi,
+            final AddLinkStackOverflowSpi addLinkStackOverflowSpi,
+            final FindGitHubUpdatesSpi findGitHubUpdatesSpi,
+            final FindStackOverflowUpdatesSpi findStackOverflowUpdatesSpi) {
 
         final var handlerFunction = new AddLinkHandlerFunction(
-                new AddLinkUseCase(addLinkSpi));
+                new AddLinkUseCase(
+                        addLinkGitHubSpi,
+                        addLinkStackOverflowSpi,
+                        findGitHubUpdatesSpi,
+                        findStackOverflowUpdatesSpi));
         handlerFunction.setBeanFactory(beanFactory);
 
         return route()

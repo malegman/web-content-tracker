@@ -5,12 +5,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.tinkoff.edu.java.scrapper.application.links.api.FindLinksApi.Result;
 import ru.tinkoff.edu.java.scrapper.application.links.api.FindLinksApi.Payload;
-import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.LinkDto;
+import ru.tinkoff.edu.java.scrapper.application.links.api.FindLinksApi.Result;
+import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.TgChatLinkDto;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.FindLinksSpi;
-import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.LinkId;
+import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.exception.TgChatNotExistsException;
+import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.LinkType;
 import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.TgChatId;
+import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.TgChatLinkId;
 import ru.tinkoff.edu.java.scrapper.common.validation.Validation;
 
 import java.util.List;
@@ -18,7 +20,6 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
 public class FindLinksUseCaseTest {
@@ -39,7 +40,7 @@ public class FindLinksUseCaseTest {
         // given
         final var tgChatId = new TgChatId(1);
 
-        final var listLinkDto = List.of(new LinkDto(new LinkId(1), "url")); 
+        final var listLinkDto = List.of(new TgChatLinkDto(new TgChatLinkId(1), "url", LinkType.GITHUB));
         doReturn(listLinkDto).when(this.findLinksSpi).findLinks(tgChatId);
 
         // when
@@ -75,7 +76,7 @@ public class FindLinksUseCaseTest {
         // given
         final var tgChatId = new TgChatId(1);
 
-        final var exception = new RuntimeException();
+        final var exception = new TgChatNotExistsException();
         doThrow(exception).when(this.findLinksSpi).findLinks(tgChatId);
 
         // when
@@ -83,7 +84,7 @@ public class FindLinksUseCaseTest {
                 .tgChatId(tgChatId));
 
         // then
-        assertEquals(Result.executionFailed(exception), result);
+        assertEquals(Result.notFound(), result);
         verifyNoMoreInteractions(this.findLinksSpi);
     }
 }

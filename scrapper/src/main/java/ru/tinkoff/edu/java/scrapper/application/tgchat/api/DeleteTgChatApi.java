@@ -71,7 +71,7 @@ public abstract class DeleteTgChatApi extends Invocation<DeleteTgChatApi.Payload
 
             void onValidationFailed(ValidationFailed result);
 
-            void onExecutionFailed(ExecutionFailed result);
+            void onExecutionFailed(NotFound result);
         }
 
         enum Success implements Result {
@@ -96,7 +96,8 @@ public abstract class DeleteTgChatApi extends Invocation<DeleteTgChatApi.Payload
             }
         }
 
-        record ExecutionFailed(Exception exception) implements Result {
+        enum NotFound implements Result {
+            INSTANCE;
 
             @Override
             public void visit(Visitor visitor) {
@@ -112,8 +113,8 @@ public abstract class DeleteTgChatApi extends Invocation<DeleteTgChatApi.Payload
             return new ValidationFailed(validation);
         }
 
-        static ExecutionFailed executionFailed(final Exception exception) {
-            return new ExecutionFailed(exception);
+        static NotFound notFound() {
+            return NotFound.INSTANCE;
         }
     }
 }

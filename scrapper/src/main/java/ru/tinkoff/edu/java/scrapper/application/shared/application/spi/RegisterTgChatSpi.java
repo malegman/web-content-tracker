@@ -1,5 +1,6 @@
 package ru.tinkoff.edu.java.scrapper.application.shared.application.spi;
 
+import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.exception.TgChatAlreadyExistsException;
 import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.TgChatId;
 
 /**
@@ -12,6 +13,8 @@ public interface RegisterTgChatSpi {
      * Метод для регистрации чата телеграмма
      *
      * @param tgChatId идентификатор чата
+     *
+     * @throws TgChatAlreadyExistsException чат уже существует
      */
-    void registerTgChat(TgChatId tgChatId);
+    void registerTgChat(TgChatId tgChatId) throws TgChatAlreadyExistsException;
 }

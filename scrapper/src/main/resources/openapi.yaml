@@ -36,6 +36,8 @@ paths:
                 "$ref": "#/components/schemas/ApiErrorResponse"
         '404':
           description: Чат не существует
+        '409':
+          description: Чат уже отслеживается
     delete:
       tags:
         - tg-chat

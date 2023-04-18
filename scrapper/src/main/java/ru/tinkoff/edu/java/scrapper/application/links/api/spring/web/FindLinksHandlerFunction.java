@@ -6,7 +6,6 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.servlet.function.ServerRequest;
 import org.springframework.web.servlet.function.ServerResponse;
-import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.LinkId;
 import ru.tinkoff.edu.java.scrapper.common.errors.ValidationFailedException;
 import ru.tinkoff.edu.java.scrapper.common.spring.web.AbstractScrapperHandlerFunction;
 import ru.tinkoff.edu.java.scrapper.application.links.api.FindLinksApi;
@@ -67,8 +66,8 @@ public final class FindLinksHandlerFunction extends AbstractScrapperHandlerFunct
                     .body(new ListLinksResponse(
                             links.stream()
                                     .map(linkDto -> new LinkResponse(
-                                            LinkId.valueFrom(linkDto.id()),
-                                            linkDto.url()))
+                                            linkDto.id().value(),
+                                            linkDto.link()))
                                     .toList(),
                             links.size()));
         }
@@ -79,13 +78,9 @@ public final class FindLinksHandlerFunction extends AbstractScrapperHandlerFunct
         }
 
         @Override
-        public void onExecutionFailed(ExecutionFailed result) {
+        public void onNotFound(NotFound result) {
 
-            final var exception = result.exception();
-
-            // TODO обработка ошибки выполнения операции
-
-            throw new RuntimeException(exception);
+            this.serverResponse = SR_NOT_FOUND;
         }
     }
 }

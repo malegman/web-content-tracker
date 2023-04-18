@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -29,6 +30,8 @@ import java.util.UUID;
 public abstract class AbstractScrapperHandlerFunction implements HandlerFunction<ServerResponse>, BeanFactoryAware {
 
     public static final ServerResponse SR_NO_CONTENT = ServerResponse.noContent().build();
+    public static final ServerResponse SR_NOT_FOUND= ServerResponse.notFound().build();
+    public static final ServerResponse SR_CONFLICT = ServerResponse.status(HttpStatus.CONFLICT).build();
 
     private final TransactionDefinition transactionDefinition;
     private TransactionOperations transactionOperations;

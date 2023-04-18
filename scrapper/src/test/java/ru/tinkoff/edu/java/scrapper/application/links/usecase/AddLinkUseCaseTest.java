@@ -7,10 +7,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.tinkoff.edu.java.scrapper.application.links.api.AddLinkApi.Payload;
 import ru.tinkoff.edu.java.scrapper.application.links.api.AddLinkApi.Result;
-import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.LinkDto;
-import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.AddLinkSpi;
+import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.TgChatLinkDto;
+import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.AddLinkGitHubSpi;
+import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.AddLinkStackOverflowSpi;
+import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.FindGitHubUpdatesSpi;
+import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.FindStackOverflowUpdatesSpi;
 import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.LinkId;
+import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.LinkType;
 import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.TgChatId;
+import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.TgChatLinkId;
 import ru.tinkoff.edu.java.scrapper.common.validation.Validation;
 
 import java.util.List;
@@ -23,13 +28,20 @@ import static org.mockito.Mockito.*;
 public class AddLinkUseCaseTest {
 
     @Mock
-    AddLinkSpi addLinkSpi;
+    AddLinkGitHubSpi addLinkGitHubSpi;
+    @Mock
+    AddLinkStackOverflowSpi addLinkStackOverflowSpi;
+    @Mock
+    FindGitHubUpdatesSpi findGitHubUpdatesSpi;
+    @Mock
+    FindStackOverflowUpdatesSpi findStackOverflowUpdatesSpi;
 
     AddLinkUseCase useCase;
 
     @BeforeEach
     void setUp() {
-        this.useCase = new AddLinkUseCase(this.addLinkSpi);
+        this.useCase = new AddLinkUseCase(this.addLinkGitHubSpi, this.addLinkStackOverflowSpi,
+                this.findGitHubUpdatesSpi, this.findStackOverflowUpdatesSpi);
     }
 
     @Test
@@ -39,8 +51,8 @@ public class AddLinkUseCaseTest {
         final var url = "url";
         final var tgChatId = new TgChatId(1);
 
-        final var linkId = new LinkId(1);
-        doReturn(linkId).when(this.addLinkSpi).addLink(tgChatId, url);
+        final var tgChatLinkId = new TgChatLinkId(1);
+        doReturn(tgChatLinkId).when(this.addLinkGitHubSpi).addLinkGitHub(tgChatId, url, null); // временная заглушка
 
         // when
         final var result = this.useCase.invoke(builder -> builder
@@ -48,8 +60,8 @@ public class AddLinkUseCaseTest {
                 .link(url));
 
         // then
-        assertEquals(Result.success(new LinkDto(linkId, url)), result);
-        verifyNoMoreInteractions(this.addLinkSpi);
+        assertEquals(Result.success(new TgChatLinkDto(tgChatLinkId, url, LinkType.GITHUB)), result);
+        verifyNoMoreInteractions(this.addLinkGitHubSpi);
     }
 
     @Test
@@ -71,7 +83,7 @@ public class AddLinkUseCaseTest {
                 Payload.PROP_LINK,
                 List.of(Payload.ERROR_LINK)
         ))), result);
-        verifyNoMoreInteractions(this.addLinkSpi);
+        verifyNoMoreInteractions(this.addLinkGitHubSpi);
     }
 
     @Test
@@ -82,7 +94,7 @@ public class AddLinkUseCaseTest {
         final var tgChatId = new TgChatId(1);
 
         final var exception = new RuntimeException();
-        doThrow(exception).when(this.addLinkSpi).addLink(tgChatId, url);
+        doThrow(exception).when(this.addLinkGitHubSpi).addLinkGitHub(tgChatId, url, null); // временная заглушка
 
         // when
         final var result = this.useCase.invoke(builder -> builder
@@ -90,7 +102,7 @@ public class AddLinkUseCaseTest {
                 .link(url));
 
         // then
-        assertEquals(Result.executionFailed(exception), result);
-        verifyNoMoreInteractions(this.addLinkSpi);
+        assertEquals(Result.linkAlreadyExists(), result);
+        verifyNoMoreInteractions(this.addLinkGitHubSpi);
     }
 }
