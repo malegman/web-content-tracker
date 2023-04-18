@@ -7,10 +7,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.tinkoff.edu.java.scrapper.application.links.api.DeleteLinkApi.Payload;
 import ru.tinkoff.edu.java.scrapper.application.links.api.DeleteLinkApi.Result;
-import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.LinkDto;
+import ru.tinkoff.edu.java.scrapper.application.shared.application.dto.TgChatLinkDto;
 import ru.tinkoff.edu.java.scrapper.application.shared.application.spi.DeleteLinkSpi;
 import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.LinkId;
 import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.TgChatId;
+import ru.tinkoff.edu.java.scrapper.application.shared.domain.id.TgChatLinkId;
 import ru.tinkoff.edu.java.scrapper.common.validation.Validation;
 
 import java.util.List;
@@ -40,8 +41,8 @@ public class DeleteLinkUseCaseTest {
         final var url = "url";
         final var tgChatId = new TgChatId(1);
 
-        final var linkId = new LinkId(1);
-        doReturn(linkId).when(this.deleteLinkSpi).deleteLink(tgChatId, url);
+        final var tgChatLinkId = new TgChatLinkId(1);
+        doReturn(tgChatLinkId).when(this.deleteLinkSpi).deleteLink(tgChatId, url);
 
         // when
         final var result = this.useCase.invoke(builder -> builder
@@ -49,7 +50,7 @@ public class DeleteLinkUseCaseTest {
                 .link(url));
 
         // then
-        assertEquals(Result.success(new LinkDto(linkId, url)), result);
+        assertEquals(Result.success(new TgChatLinkDto(tgChatLinkId, url, null)), result);
         verifyNoMoreInteractions(this.deleteLinkSpi);
     }
 
@@ -91,7 +92,7 @@ public class DeleteLinkUseCaseTest {
                 .link(url));
 
         // then
-        assertEquals(Result.executionFailed(exception), result);
+        assertEquals(Result.notFound(), result);
         verifyNoMoreInteractions(this.deleteLinkSpi);
     }
 }

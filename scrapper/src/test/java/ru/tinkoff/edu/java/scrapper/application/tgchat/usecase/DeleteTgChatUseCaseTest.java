@@ -79,7 +79,7 @@ public class DeleteTgChatUseCaseTest {
                 .id(tgChatId));
 
         // then
-        assertEquals(Result.executionFailed(exception), result);
+        assertEquals(Result.notFound(), result);
         verifyNoMoreInteractions(this.deleteTgChatSpi);
     }
 }
